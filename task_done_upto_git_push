@@ -1,0 +1,104 @@
+PS C:\laragon\www\rentandroom\ghorer_menu> git log --oneline
+8e8d018 (HEAD -> main) cart count functionalities done       
+954c1e8 (origin/main, origin/HEAD) add sql file while transfe8e8d018 (HEAD -> main) cart count functionalities done       
+954c1e8 (origin/main, origin/HEAD) add sql file while transfer
+c58c575 registration remove dollar sign branchs like landing 
+page
+8e8d018 (HEAD -> main) cart count functionalities done       
+954c1e8 (origin/main, origin/HEAD) add sql file while transfer
+c58c575 registration remove dollar sign branchs like landing 
+page
+859c167 add half price for each food
+7bf3128 order type select option working
+8e8d018 (HEAD -> main) cart count functionalities done       
+954c1e8 (origin/main, origin/HEAD) add sql file while transfer
+c58c575 registration remove dollar sign branchs like landing 
+page
+859c167 add half price for each food
+7bf3128 order type select option working
+7871813 some change in FoodMenuController
+9a4e691 some change
+54a6f3a add order type delivery or collection dropdown       
+775dbf2 cart management done
+9e509d8 remove unnecessary code from foodmenu.vue template   
+e741424 add subtotal to cart
+8e8d018 (HEAD -> main) cart count functionalities done       
+954c1e8 (origin/main, origin/HEAD) add sql file while transfer
+c58c575 registration remove dollar sign branchs like landing 
+page
+859c167 add half price for each food
+7bf3128 order type select option working
+7871813 some change in FoodMenuController
+9a4e691 some change
+54a6f3a add order type delivery or collection dropdown       
+775dbf2 cart management done
+9e509d8 remove unnecessary code from foodmenu.vue template   
+e741424 add subtotal to cart
+d7bedcb add proceed to checkout button
+8e8d018 (HEAD -> main) cart count functionalities done       
+954c1e8 (origin/main, origin/HEAD) add sql file while transfer
+c58c575 registration remove dollar sign branchs like landing 
+page
+859c167 add half price for each food
+7bf3128 order type select option working
+7871813 some change in FoodMenuController
+9a4e691 some change
+54a6f3a add order type delivery or collection dropdown       
+775dbf2 cart management done
+9e509d8 remove unnecessary code from foodmenu.vue template   
+e741424 add subtotal to cart
+d7bedcb add proceed to checkout button
+a03f4d6 change cart logic
+8e8d018 (HEAD -> main) cart count functionalities done       
+954c1e8 (origin/main, origin/HEAD) add sql file while transfer
+c58c575 registration remove dollar sign branchs like landing 
+page
+859c167 add half price for each food
+7bf3128 order type select option working
+7871813 some change in FoodMenuController
+9a4e691 some change
+54a6f3a add order type delivery or collection dropdown       
+775dbf2 cart management done
+9e509d8 remove unnecessary code from foodmenu.vue template   
+e741424 add subtotal to cart
+d7bedcb add proceed to checkout button
+a03f4d6 change cart logic
+9a64659 change frontend design
+692644d single signed in feature added
+:...skipping...
+8e8d018 (HEAD -> main) cart count functionalities done       
+954c1e8 (origin/main, origin/HEAD) add sql file while transfer
+c58c575 registration remove dollar sign branchs like landing 
+page
+859c167 add half price for each food
+7bf3128 order type select option working
+7871813 some change in FoodMenuController
+9a4e691 some change
+54a6f3a add order type delivery or collection dropdown       
+775dbf2 cart management done
+9e509d8 remove unnecessary code from foodmenu.vue template   
+e741424 add subtotal to cart
+d7bedcb add proceed to checkout button
+a03f4d6 change cart logic
+9a64659 change frontend design
+692644d single signed in feature added
+0b08b69 landing page redisign
+:...skipping...
+8e8d018 (HEAD -> main) cart count functionalities done
+954c1e8 (origin/main, origin/HEAD) add sql file while transfer
+c58c575 registration remove dollar sign branchs like landing 
+page
+859c167 add half price for each food
+7bf3128 order type select option working
+7871813 some change in FoodMenuController
+9a4e691 some change
+54a6f3a add order type delivery or collection dropdown
+775dbf2 cart management done
+9e509d8 remove unnecessary code from foodmenu.vue template   
+e741424 add subtotal to cart
+d7bedcb add proceed to checkout button
+a03f4d6 change cart logic
+9a64659 change frontend design
+692644d single signed in feature added
+0b08b69 landing page redisign
+71f8623 handover version
