@@ -2,12 +2,10 @@
   <AdminLayout>
     <div class="container mx-auto py-6">
       <!-- Back Button -->
-      <Link
-        :href="route('admin.orders.index')"
-        class="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 mb-6"
-      >
-        <i class="fas fa-arrow-left mr-2"></i>
-        Back to Orders
+      <Link :href="route('admin.orders.index')"
+        class="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 mb-6">
+      <i class="fas fa-arrow-left mr-2"></i>
+      Back to Orders
       </Link>
 
       <!-- Order Header -->
@@ -15,40 +13,23 @@
         <div class="p-6">
           <div class="flex flex-col md:flex-row md:items-center md:justify-between">
             <div>
-              <h1
-                class="text-2xl font-semibold text-gray-900 dark:text-white mb-2"
-              >Order #{{ order.id }}</h1>
-              <p
-                class="text-sm text-gray-500 dark:text-gray-400"
-              >Placed {{ formatDate(order.created_at) }}</p>
+              <h1 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2">Order #{{ order.id }}</h1>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Placed {{ formatDate(order.created_at) }}</p>
             </div>
             <div class="mt-4 md:mt-0 space-y-2 md:space-y-0 md:space-x-2">
               <!-- Status Select -->
-              <select
-                v-model="order.status"
-                @change="updateOrderStatus"
-                class="px-4 py-2 rounded-lg border text-sm font-medium"
-                :class="getStatusClasses(order.status)"
-              >
-                <option
-                  v-for="status in orderStatuses"
-                  :key="status"
-                  :value="status"
-                >{{ formatStatus(status) }}</option>
+              <select v-model="order.status" @change="updateOrderStatus"
+                class="px-4 py-2 rounded-lg border text-sm font-medium" :class="getStatusClasses(order.status)">
+                <option v-for="status in orderStatuses" :key="status" :value="status">{{ formatStatus(status) }}
+                </option>
               </select>
 
               <!-- Payment Status Select -->
-              <select
-                v-model="order.payment_status"
-                @change="updatePaymentStatus"
+              <select v-model="order.payment_status" @change="updatePaymentStatus"
                 class="px-4 py-2 rounded-lg border text-sm font-medium"
-                :class="getPaymentStatusClasses(order.payment_status)"
-              >
-                <option
-                  v-for="status in paymentStatuses"
-                  :key="status"
-                  :value="status"
-                >{{ formatStatus(status) }}</option>
+                :class="getPaymentStatusClasses(order.payment_status)">
+                <option v-for="status in paymentStatuses" :key="status" :value="status">{{ formatStatus(status) }}
+                </option>
               </select>
             </div>
           </div>
@@ -95,9 +76,7 @@
               </div>
               <div>
                 <label class="text-sm text-gray-500 dark:text-gray-400">Estimated Delivery</label>
-                <p
-                  class="text-gray-900 dark:text-white"
-                >{{ formatDate(order.estimated_delivery_time) }}</p>
+                <p class="text-gray-900 dark:text-white">{{ formatDate(order.estimated_delivery_time) }}</p>
               </div>
             </div>
           </div>
@@ -112,10 +91,8 @@
               </div>
               <div>
                 <label class="text-sm text-gray-500 dark:text-gray-400">Payment Status</label>
-                <span
-                  class="inline-flex px-2.5 py-0.5 rounded-full text-sm font-medium mt-1"
-                  :class="getPaymentStatusClasses(order.payment_status)"
-                >{{ formatStatus(order.payment_status) }}</span>
+                <span class="inline-flex px-2.5 py-0.5 rounded-full text-sm font-medium mt-1"
+                  :class="getPaymentStatusClasses(order.payment_status)">{{ formatStatus(order.payment_status) }}</span>
               </div>
             </div>
           </div>
@@ -131,15 +108,9 @@
                 <div v-for="item in order.items" :key="item.id" class="py-4">
                   <div class="flex items-center">
                     <!-- Food Image -->
-                    <div
-                      class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-gray-200 dark:bg-gray-700"
-                    >
-                      <img
-                        v-if="item.food.image"
-                        :src="item.food.image"
-                        :alt="item.food.name"
-                        class="h-full w-full object-cover"
-                      />
+                    <div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-gray-200 dark:bg-gray-700">
+                      <img v-if="item.food.image" :src="item.food.image" :alt="item.food.name"
+                        class="h-full w-full object-cover" />
                       <div v-else class="h-full w-full flex items-center justify-center">
                         <i class="fas fa-utensils text-gray-400"></i>
                       </div>
@@ -150,9 +121,8 @@
                       <div class="flex justify-between">
                         <div>
                           <h4 class="text-gray-900 dark:text-white">{{ item.food.name }}</h4>
-                          <p
-                            class="mt-1 text-sm text-gray-500 dark:text-gray-400"
-                          >Qty: {{ item.quantity }} × ${{ item.unit_price }}</p>
+                          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Qty: {{ item.quantity }} × ${{
+                            item.unit_price }}</p>
                         </div>
                         <p class="text-gray-900 dark:text-white font-medium">${{ item.subtotal }}</p>
                       </div>
@@ -161,19 +131,14 @@
                       <div v-if="item.extras?.length" class="mt-2">
                         <p class="text-sm text-gray-500 dark:text-gray-400">Extras:</p>
                         <ul class="mt-1 space-y-1">
-                          <li
-                            v-for="extra in item.extras"
-                            :key="extra.id"
-                            class="text-sm text-gray-500 dark:text-gray-400"
-                          >- {{ extra.name }} (+${{ extra.price }})</li>
+                          <li v-for="extra in item.extras" :key="extra.id"
+                            class="text-sm text-gray-500 dark:text-gray-400">- {{ extra.name }} (+${{ extra.price }})
+                          </li>
                         </ul>
                       </div>
 
                       <!-- Special Instructions -->
-                      <p
-                        v-if="item.special_instructions"
-                        class="mt-2 text-sm text-gray-500 dark:text-gray-400"
-                      >
+                      <p v-if="item.special_instructions" class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                         <span class="font-medium">Note:</span>
                         {{ item.special_instructions }}
                       </p>
@@ -198,13 +163,9 @@
                   <dt class="text-gray-500 dark:text-gray-400">Tax</dt>
                   <dd class="text-gray-900 dark:text-white">${{ order.tax }}</dd>
                 </div>
-                <div
-                  class="flex justify-between pt-4 border-t border-gray-200 dark:border-gray-700"
-                >
+                <div class="flex justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
                   <dt class="text-lg font-medium text-gray-900 dark:text-white">Total</dt>
-                  <dd
-                    class="text-lg font-medium text-gray-900 dark:text-white"
-                  >${{ order.total_amount }}</dd>
+                  <dd class="text-lg font-medium text-gray-900 dark:text-white">${{ order.total_amount }}</dd>
                 </div>
               </dl>
             </div>
@@ -215,7 +176,7 @@
   </AdminLayout>
 </template>
 
-  <script setup>
+<script setup>
 import { ref } from "vue";
 import { Link, router } from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout.vue";

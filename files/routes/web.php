@@ -22,9 +22,7 @@ use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\SslCommerzPaymentController;
 
 Route::get('track', function (Request $request) {
-    $request->fullUrl();
     $location = Location::get('5.162.104.224');
-    dd('db');
 });
 
 Route::get('/sso-login', function (Request $request) {

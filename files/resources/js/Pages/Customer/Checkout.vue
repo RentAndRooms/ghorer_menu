@@ -1,20 +1,14 @@
 <template>
   <CustomerLayout>
-    <div
-      id="modal"
-      v-if="isPayOpen"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out"
-    >
+    <div id="modal" v-if="isPayOpen"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out">
       <div
-        class="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md transform transition-all duration-300 scale-95 animate-fadeIn text-gray-700"
-      >
-        <h2 class="text-xl font-semibold mb-4 text-center">Complete Payment</h2>
+        class="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md transform transition-all duration-300 scale-95 animate-fadeIn text-gray-700">
+        <h2 class="text-xl font-semibold mb-4 text-center">Complete dd Payment</h2>
 
         <label class="block mb-2 text-sm font-medium">Choice Payment Method</label>
-        <select
-          v-model="paymentMethod"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-        >
+        <select v-model="paymentMethod"
+          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
           <option value>Choose an option</option>
           <option value="bikash">Bikash</option>
           <option value="nogod">Nogod</option>
@@ -24,32 +18,25 @@
         <div v-if="paymentMethod" class="mt-4">
           <p>Pay to following {{ paymentMethod }} number: 0122514244225</p>
           <div>
-            <label
-              class="block mb-2 text-sm font-medium"
-            >Enter {{ paymentMethod }} reference number:</label>
+            <label class="block mb-2 text-sm font-medium">Enter {{ paymentMethod }} reference number:</label>
             <input type="text" v-model="paymentRef" />
           </div>
         </div>
 
         <!-- Close button -->
         <div class="mt-6 flex justify-end">
-          <button
-            @click="isPayOpen = false"
-            class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
-          >Close</button>
-          <button
-            @click="completeOrder"
-            class="ml-3 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
-          >Complete Payment</button>
+          <button @click="isPayOpen = false"
+            class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">Close</button>
+          <button @click="completeOrder"
+            class="ml-3 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition">Complete
+            Payment</button>
         </div>
       </div>
     </div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <!-- Error Messages -->
-      <div
-        v-if="Object.keys(validationErrors).length > 0"
-        class="mb-4 p-4 bg-red-100 dark:bg-red-900/50 border border-red-400 text-red-700 dark:text-red-300 rounded"
-      >
+      <div v-if="Object.keys(validationErrors).length > 0"
+        class="mb-4 p-4 bg-red-100 dark:bg-red-900/50 border border-red-400 text-red-700 dark:text-red-300 rounded">
         <p v-for="(error, key) in validationErrors" :key="key">{{ error }}</p>
       </div>
 
@@ -59,28 +46,22 @@
           <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
             <div class="flex justify-between items-center mb-4">
               <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Order Summary</h2>
-              <div
-                class="text-lg font-medium text-orange-600 dark:text-orange-400"
-              >{{ orderType === 'delivery' ? 'Delivery Order' : 'Collection Order' }}</div>
+              <div class="text-lg font-medium text-orange-600 dark:text-orange-400">{{ orderType === 'delivery' ?
+                'Delivery Order' : 'Collection Order' }}</div>
             </div>
             <div v-if="cart.length" class="space-y-4">
-              <div
-                v-for="item in cart"
-                :key="item.id"
-                class="flex justify-between items-start border-b border-gray-200 dark:border-gray-700 pb-4"
-              >
+              <div v-for="item in cart" :key="item.id"
+                class="flex justify-between items-start border-b border-gray-200 dark:border-gray-700 pb-4">
                 <div>
                   <h3 class="text-gray-900 dark:text-gray-200 font-medium">{{ item.name }}</h3>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Quantity: {{ item.qty }}</p>
-                  <p
-                    v-if="item.instructions"
-                    class="text-sm text-gray-600 dark:text-gray-400"
-                  >Note: {{ item.instructions }}</p>
+                  <p v-if="item.instructions" class="text-sm text-gray-600 dark:text-gray-400">Note: {{
+                    item.instructions }}</p>
                 </div>
                 <span class="text-gray-900 dark:text-gray-200">
                   <span style="font-size: 30px;">৳</span>
                   {{
-                  item.total}}
+                    item.total }}
                 </span>
               </div>
             </div>
@@ -91,30 +72,22 @@
           <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
             <div class="flex justify-between items-center mb-4">
               <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Delivery Address</h2>
-              <button
-                @click="openAddressModal"
-                class="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300"
-              >+ Add New Address</button>
+              <button @click="openAddressModal"
+                class="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300">+ Add New
+                Address</button>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div
-                v-for="address in addresses"
-                :key="address.id"
-                @click="selectedAddress = address"
-                class="border rounded-lg p-4 cursor-pointer transition-colors duration-200"
-                :class="[
-                                    selectedAddress?.id === address.id
-                                        ? 'border-orange-500 bg-orange-50 dark:bg-gray-700'
-                                        : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'
-                                ]"
-              >
+              <div v-for="address in addresses" :key="address.id" @click="selectedAddress = address"
+                class="border rounded-lg p-4 cursor-pointer transition-colors duration-200" :class="[
+                  selectedAddress?.id === address.id
+                    ? 'border-orange-500 bg-orange-50 dark:bg-gray-700'
+                    : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'
+                ]">
                 <div class="flex items-start space-x-3">
                   <MapPinIcon class="w-5 h-5 text-gray-400 flex-shrink-0" />
                   <div>
-                    <p
-                      class="text-gray-900 dark:text-gray-200 font-medium"
-                    >{{ address.address_label }}</p>
+                    <p class="text-gray-900 dark:text-gray-200 font-medium">{{ address.address_label }}</p>
                     <p class="text-sm text-gray-600 dark:text-gray-400">{{ address.address }}</p>
                   </div>
                 </div>
@@ -123,7 +96,7 @@
           </div>
 
           <!-- Collection Information Section (Only for collection orders) -->
-          <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div v-if="orderType != 'delivery'" class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
             <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Food Provider</h2>
             <div class="flex items-start space-x-3">
               <MapPinIcon class="w-5 h-5 text-gray-400 flex-shrink-0" />
@@ -139,30 +112,24 @@
           <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
             <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Payment Method</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <button
-                v-for="method in ['cash','mobile']"
-                :key="method"
-                @click="selectedPaymentMethod = method"
-                class="flex items-center space-x-3 border rounded-lg p-4 transition-colors duration-200"
-                :class="[
-                                    selectedPaymentMethod === method
-                                        ? 'border-orange-500 bg-orange-50 dark:bg-gray-700'
-                                        : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'
-                                ]"
-              >
+              <button v-for="method in ['cash', 'mobile']" :key="method" @click="selectedPaymentMethod = method"
+                class="flex items-center space-x-3 border rounded-lg p-4 transition-colors duration-200" :class="[
+                  selectedPaymentMethod === method
+                    ? 'border-orange-500 bg-orange-50 dark:bg-gray-700'
+                    : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'
+                ]">
                 <CreditCardIcon class="w-5 h-5 text-gray-400" />
-                <span
-                  class="text-gray-900 dark:text-gray-200 capitalize"
-                >{{ method == 'cash' ? method : 'Mobile Payment' }}</span>
+                <span class="text-gray-900 dark:text-gray-200 capitalize">
+                  {{ method === 'cash' ? method : 'Mobile Payment' }}
+                </span>
               </button>
             </div>
           </div>
 
           <!-- Special Instructions (Changed from Delivery Notes) -->
           <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <h2
-              class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4"
-            >{{ orderType === 'delivery' ? 'Delivery Instructions' : 'Instructions' }}</h2>
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ orderType === 'delivery' ?
+              'Delivery Instructions' : 'Instructions' }}</h2>
             <!-- <textarea
               v-model="deliveryNotes"
               rows="3"
@@ -185,10 +152,7 @@
                 </span>
               </div>
               <!-- Only show delivery fee for delivery orders -->
-              <div
-                v-if="orderType === 'delivery'"
-                class="flex justify-between text-gray-600 dark:text-gray-300"
-              >
+              <div v-if="orderType === 'delivery'" class="flex justify-between text-gray-600 dark:text-gray-300">
                 <span>Delivery Fee</span>
                 <span>
                   <span style="font-size: 30px;">৳</span>
@@ -196,9 +160,7 @@
                 </span>
               </div>
               <div class="border-t border-gray-200 dark:border-gray-700 pt-3">
-                <div
-                  class="flex justify-between text-lg font-semibold text-gray-900 dark:text-gray-100"
-                >
+                <div class="flex justify-between text-lg font-semibold text-gray-900 dark:text-gray-100">
                   <span>Total</span>
                   <span>
                     <span style="font-size: 30px;">৳</span>
@@ -208,17 +170,14 @@
               </div>
             </div>
 
-            <button
-              @click="placeOrder"
-              :disabled="isProcessing || !cart.length"
-              class="w-full mt-6 bg-orange-600 text-white py-3 px-4 rounded-lg hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-            >{{ isProcessing ? 'Processing...' : 'Place Order' }}</button>
+            <button @click="placeOrder" :disabled="isProcessing || !cart.length"
+              class="w-full mt-6 bg-orange-600 text-white py-3 px-4 rounded-lg hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200">{{
+                isProcessing ? 'Processing...' : 'Place Order' }}</button>
 
             <!-- Minimum order warning if applicable -->
-            <div
-              v-if="subtotal < (branch.minimum_order || 0)"
-              class="mt-3 text-sm text-red-600 dark:text-red-400 text-center"
-            >Minimum order amount is {{ formatCurrency(branch.minimum_order) }}</div>
+            <div v-if="subtotal < (branch.minimum_order || 0)"
+              class="mt-3 text-sm text-red-600 dark:text-red-400 text-center">Minimum order amount is {{
+                formatCurrency(branch.minimum_order) }}</div>
           </div>
         </div>
       </div>
@@ -232,12 +191,9 @@
         <div class="fixed inset-0 overflow-y-auto">
           <div class="flex min-h-full items-center justify-center p-4">
             <DialogPanel
-              class="w-full max-w-md transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all"
-            >
-              <DialogTitle
-                as="h3"
-                class="text-lg font-medium text-gray-900 dark:text-gray-100"
-              >Add New Address</DialogTitle>
+              class="w-full max-w-md transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
+              <DialogTitle as="h3" class="text-lg font-medium text-gray-900 dark:text-gray-100">Add New Address
+              </DialogTitle>
 
               <div class="mt-4 space-y-4">
                 <div>
@@ -245,12 +201,9 @@
                     Address
                     Label
                   </label>
-                  <input
-                    type="text"
-                    v-model="newAddress.address_label"
+                  <input type="text" v-model="newAddress.address_label"
                     class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
-                    placeholder="Home, Work, etc."
-                  />
+                    placeholder="Home, Work, etc." />
                 </div>
 
                 <div>
@@ -258,19 +211,13 @@
                     Full
                     Address
                   </label>
-                  <textarea
-                    v-model="newAddress.address"
-                    rows="3"
-                    class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
-                  ></textarea>
+                  <textarea v-model="newAddress.address" rows="3"
+                    class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"></textarea>
                 </div>
 
                 <div class="flex items-center">
-                  <input
-                    type="checkbox"
-                    v-model="newAddress.is_default"
-                    class="rounded border-gray-300 dark:border-gray-600 text-orange-600 focus:ring-orange-500"
-                  />
+                  <input type="checkbox" v-model="newAddress.is_default"
+                    class="rounded border-gray-300 dark:border-gray-600 text-orange-600 focus:ring-orange-500" />
                   <label class="ml-2 text-sm text-gray-700 dark:text-gray-300">
                     Set as default
                     address
@@ -279,14 +226,11 @@
               </div>
 
               <div class="mt-6 flex justify-end space-x-3">
-                <button
-                  @click="closeAddressModal"
-                  class="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-                >Cancel</button>
-                <button
-                  @click="saveAddress"
-                  class="px-4 py-2 text-sm bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors duration-200"
-                >Save Address</button>
+                <button @click="closeAddressModal"
+                  class="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200">Cancel</button>
+                <button @click="saveAddress"
+                  class="px-4 py-2 text-sm bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors duration-200">Save
+                  Address</button>
               </div>
             </DialogPanel>
           </div>
@@ -372,6 +316,7 @@ const loadCart = () => {
 
   try {
     const savedCart = localStorage.getItem("selectedItem");
+
     if (!savedCart) {
       redirectToMenu();
       return;
