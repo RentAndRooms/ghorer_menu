@@ -21,9 +21,10 @@ use App\Http\Controllers\BranchSelectionController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\SslCommerzPaymentController;
 
-Route::get('track', function () {
+Route::get('track', function (Request $request) {
+    $request->fullUrl();
     $location = Location::get('5.162.104.224');
-    dd($location);
+    dd('db');
 });
 
 Route::get('/sso-login', function (Request $request) {
@@ -69,8 +70,6 @@ Route::get('/welcome', function () {
 });
 
 Route::get('/', function (Request $request) {
-       $orderData = User::withCount('orders')->get();
-       dd($orderData[0]->orders);
         $userLat = $request->input('latitude');
         $userLng = $request->input('longitude');
         $query = Branch::query()->active();
