@@ -347,6 +347,8 @@ const loadCart = () => {
     }
 
     cart.value = cartData.items;
+    console.log("Cart items loaded:", cart.value);
+
     console.log("cart itmes", cart.value);
     orderType.value = cartData.order_type;
     console.log("Order Type set to:", orderType.value);
@@ -430,34 +432,6 @@ const validateMinimumOrder = () => {
   return true;
 };
 
-[
-  {
-    id: 7,
-    branch_id: 25,
-    category_id: 5,
-    name: "Angelica Soto",
-    description: "Aliquam tempora magn",
-    base_price: "608.00",
-    preparation_time: 15,
-    image_path: "foods/toJ5fj5u90PLbkjhdsnuUjicwbhaivD0UzcoUELi.webp",
-    is_vegetarian: 0,
-    is_spicy: 0,
-    allergens: null,
-    is_available: 1,
-    sort_order: 0,
-    created_at: "2025-06-29 17:05:13",
-    updated_at: "2025-06-29 17:05:13",
-    deleted_at: null,
-    created_by: null,
-    category_name: "Launch",
-    extra_option_names: null,
-    qty: 3,
-    total: 1824,
-    portion: "full",
-    instructions: "mamoon is awesome",
-  },
-];
-
 const completeOrder = () => {
   const orderData = {
     order_type: orderType.value,
@@ -466,6 +440,7 @@ const completeOrder = () => {
       food_id: item.id,
       quantity: item.qty,
       special_instructions: item.instructions || "",
+      order_extras: item.selected_extras || [],
       unit_price: item.base_price,
       subtotal: item.total,
     })),

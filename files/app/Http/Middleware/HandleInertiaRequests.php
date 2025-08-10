@@ -36,7 +36,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'auth' => [
                 'user' => fn() => $request->user()
-                    ? $request->user()->load('branch')->only('id', 'name', 'email', 'phone', 'role', 'branch')
+                    ? $request->user()->load('branch')->only('id', 'name', 'photo', 'email', 'phone', 'role', 'branch')
                     : null,
             ],
         ]);

@@ -1,5 +1,4 @@
 <?php
-use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Branch;
 use Illuminate\Http\Request;

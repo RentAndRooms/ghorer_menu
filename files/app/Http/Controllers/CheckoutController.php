@@ -96,7 +96,20 @@ class CheckoutController extends Controller
                     'subtotal' => $item['subtotal'],
                     'special_instructions' => $item['special_instructions'] ?? null,
                 ]);
+                if($item['order_extras']) {
+                    foreach ($item['order_extras'] as $extra) {
+                        $extraData = ExtraOption::find($extra);
+                        OrderItemExtra::create([
+                            'order_item_id' => $orderItem->id,
+                            'extra_option_id' => $extraData->id,
+                            'quantity' => $item['quantity'],
+                            'unit_price' => $extraData->price,
+                        ]);
+                    }
+                }
             }
+
+
 
             // Process payment based on payment method
             $paymentResult = $this->processPayment($order);

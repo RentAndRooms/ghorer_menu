@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title inertia>{{ config('app.name', 'Ghorer Menu') }}</title>
+    <title inertia>Ghorer Menu</title>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.jpg') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
