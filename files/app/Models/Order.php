@@ -81,9 +81,6 @@ class Order extends Model
         return [
             'pending',
             'confirmed',
-            'preparing',
-            'ready_for_delivery',
-            'out_for_delivery',
             'delivered',
             'cancelled',
         ];
@@ -110,18 +107,18 @@ class Order extends Model
                 'label' => 'Order Confirmed',
                 'icon' => 'fa-check-circle'
             ],
-            'preparing' => [
-                'label' => 'Preparing',
-                'icon' => 'fa-utensils'
-            ],
-            'ready_for_delivery' => [
-                'label' => 'Ready for Delivery',
-                'icon' => 'fa-box'
-            ],
-            'out_for_delivery' => [
-                'label' => 'Out for Delivery',
-                'icon' => 'fa-truck'
-            ],
+            // 'preparing' => [
+            //     'label' => 'Preparing',
+            //     'icon' => 'fa-utensils'
+            // ],
+            // 'ready_for_delivery' => [
+            //     'label' => 'Ready for Delivery',
+            //     'icon' => 'fa-box'
+            // ],
+            // 'out_for_delivery' => [
+            //     'label' => 'Out for Delivery',
+            //     'icon' => 'fa-truck'
+            // ],
             'delivered' => [
                 'label' => 'Delivered',
                 'icon' => 'fa-check-double'
@@ -166,7 +163,6 @@ class Order extends Model
                 'completed' => true
             ]];
         }
-
         return $timeline;
     }
 

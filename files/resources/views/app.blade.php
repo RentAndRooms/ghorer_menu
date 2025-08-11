@@ -21,6 +21,7 @@
 
 <body class="font-sans antialiased bg-slate-100 text-slate-900 dark:bg-slate-700 dark:text-white">
     @inertia
+    <script src="{{ asset('test.js') }}"></script>
 </body>
 
 </html>

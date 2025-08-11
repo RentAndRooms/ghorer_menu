@@ -24,6 +24,18 @@ Route::get('track', function (Request $request) {
     $location = Location::get('5.162.104.224');
 });
 
+Route::get('/about', function () {
+    return Inertia::render('About');
+})->name('about');
+
+Route::get('/privacy', function () {
+    return Inertia::render('Privacy');
+})->name('privacy');
+
+Route::get('/terms', function () {
+    return Inertia::render('Terms');
+})->name('terms');
+
 Route::get('/sso-login', function (Request $request) {
     // Step 1: Check expiration
     if ($request->expires < now()->timestamp) {
