@@ -2,22 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use Inertia\Inertia;
 use App\Models\Order;
+use App\Models\Branch;
 use App\Models\OrderItem;
-use App\Models\OrderItemExtra;
 use App\Models\ExtraOption;
 use App\Models\UserAddress;
-use App\Models\Branch;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\OrderItemExtra;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
-use Inertia\Inertia;
-use Carbon\Carbon;
 
 class CheckoutController extends Controller
 {
     public function checkout(Branch $branch)
-    {
+    { 
+        if(!Str::contains(session('previous_url'), 'collection')) {
+           session()->forget('previous_url');
+        }
+        if(session('previous_url') === null) {
+            session(['previous_url' => url()->previous()]);
+        }
         // Validate that the branch exists and is active
         if (!$branch || !$branch->is_active) {
             return redirect()->route('home')->with('error', 'Invalid branch selected.');
@@ -29,6 +36,7 @@ class CheckoutController extends Controller
         return Inertia::render('Customer/Checkout', [
             'addresses' => auth()->user()->addresses()->latest()->get(),
             'branch' => $branch,
+            'previous_url' => session('previous_url'),
             'previous_orders' => auth()->user()->orders()
                 ->with('items.food') // Change orderItems to items
                 ->latest()
@@ -117,7 +125,7 @@ class CheckoutController extends Controller
             if ($paymentResult['success']) {
                 $order->update([
                     'payment_status' => 'paid',
-                    'status' => 'confirmed'
+                    // 'status' => 'confirmed'
                 ]);
             }
 

@@ -54,7 +54,7 @@
                 <button @click="showProfileMenu = !showProfileMenu" class="flex items-center space-x-2">
                   <div class="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                     <span class="text-sm font-medium text-gray-600 dark:text-gray-300">{{ auth.user?.name?.charAt(0)
-                    }}</span>
+                      }}</span>
                   </div>
                 </button>
 
@@ -121,7 +121,7 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
           <!-- About Section -->
           <div>
-            <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">About</h3>
+            <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Pages</h3>
             <div class="mt-4 space-y-4">
               <Link :href="route('about')"
                 class="block text-base text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300">
@@ -132,7 +132,7 @@
 
           <!-- Support Section -->
           <div>
-            <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Quick Pages</h3>
+            <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Quick Links</h3>
             <div class="mt-4 space-y-4">
               <Link :href="route('privacy')"
                 class="block text-base text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300">
@@ -147,19 +147,15 @@
 
           <!-- Delivery Section -->
           <div>
-            <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Social Links</h3>
+            <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Follow Us</h3>
             <div class="mt-4 flex space-x-4">
-              <a href="#"
+              <a href="https://www.facebook.com/rentnroomsuk " target="_blank"
                 class="text-base text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300">
                 <i class="fa-brands fa-facebook-f"></i>
               </a>
-              <a href="#"
+              <a href="https://www.youtube.com/@rentandrooms" target="_blank"
                 class="text-base text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300">
-                <i class="fa-brands fa-twitter"></i>
-              </a>
-              <a href="#"
-                class="text-base text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300">
-                <i class="fa-brands fa-linkedin"></i>
+                <i class="fa-brands fa-youtube"></i>
               </a>
             </div>
 

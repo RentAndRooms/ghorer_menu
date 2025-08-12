@@ -4,7 +4,7 @@
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out">
       <div
         class="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md transform transition-all duration-300 scale-95 animate-fadeIn text-gray-700">
-        <h2 class="text-xl font-semibold mb-4 text-center">Complete dd Payment</h2>
+        <h2 class="text-xl font-semibold mb-4 text-center">Complete Payment</h2>
 
         <label class="block mb-2 text-sm font-medium">Choice Payment Method</label>
         <select v-model="paymentMethod"
@@ -40,6 +40,15 @@
         <p v-for="(error, key) in validationErrors" :key="key">{{ error }}</p>
       </div>
 
+      <div class="mb-6 flex justify-between items-center">
+        <Link :href="previous_url"
+          class="text-sm px-3 py-1 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200">
+        Back
+        </Link>
+      </div>
+
+
+
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Order Summary -->
         <div class="lg:col-span-2 space-y-6">
@@ -69,7 +78,7 @@
           </div>
 
           <!-- Delivery Address Section (Only for delivery orders) -->
-          <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6" v-if="orderType === 'delivery'">
             <div class="flex justify-between items-center mb-4">
               <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Delivery Address</h2>
               <button @click="openAddressModal"
@@ -127,16 +136,16 @@
           </div>
 
           <!-- Special Instructions (Changed from Delivery Notes) -->
-          <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <!-- <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
             <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ orderType === 'delivery' ?
               'Delivery Instructions' : 'Instructions' }}</h2>
-            <!-- <textarea
+            <textarea
               v-model="deliveryNotes"
               rows="3"
               class="w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 focus:ring-orange-500 focus:border-orange-500"
               :placeholder="orderType === 'delivery' ? 'Any special instructions for delivery...' : 'Any special instructions for collection...'"
-            ></textarea>-->
-          </div>
+            ></textarea>
+          </div> -->
         </div>
 
         <!-- Order Total -->
@@ -243,7 +252,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { router } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 import {
   Dialog,
   DialogPanel,
@@ -258,6 +267,10 @@ const props = defineProps({
   addresses: {
     type: Array,
     default: () => [],
+  },
+  previous_url: {
+    type: String,
+    default: "",
   },
   branch: {
     type: Object,

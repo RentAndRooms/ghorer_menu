@@ -1,5 +1,23 @@
 <template>
   <CustomerLayout>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-center mb-4">
+      <Link :href="route('home')"
+        class="inline-flex items-center px-4 py-2 bg-[#F9733A] hover:bg-[#ea652f] text-white rounded-lg transition-colors duration-200">
+      <i class="fas fa-home mr-2"></i>
+      Home
+      </Link>
+    </div>
+
+    <!-- Notification Component -->
+    <div v-if="notification.show"
+      class="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300"
+      :class="notification.show ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'">
+      <div class="flex items-center space-x-2">
+        <i class="fas fa-check-circle"></i>
+        <span class="font-medium">{{ notification.message }}</span>
+      </div>
+    </div>
+
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
       <!-- Branch Info Header -->
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
@@ -199,6 +217,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
+import { Link } from "@inertiajs/vue3";
 import { router } from "@inertiajs/vue3";
 import CustomerLayout from "@/Layouts/CustomerLayout.vue";
 
@@ -224,6 +243,24 @@ const selectedFood = ref(
     portion: item.portion || 'full' // Ensure portion defaults to full
   })) ?? []
 );
+
+// Notification state
+const notification = ref({
+  show: false,
+  message: '',
+  type: 'success'
+});
+
+// Show notification function
+const showNotification = (message, type = 'success', duration = 3000) => {
+  notification.value.message = message;
+  notification.value.type = type;
+  notification.value.show = true;
+
+  setTimeout(() => {
+    notification.value.show = false;
+  }, duration);
+};
 
 const calculateItemTotal = (item) => {
   // Ensure prices are numbers
@@ -304,6 +341,7 @@ const openFoodModal = (food) => {
   if (existingItem) {
     existingItem.qty += 1;
     existingItem.total = calculateItemTotal(existingItem);
+    showNotification(`${food.name} quantity updated! (${existingItem.qty})`);
   } else {
     const newItem = {
       ...food,
@@ -316,6 +354,7 @@ const openFoodModal = (food) => {
       total: basePrice // Set initial total to base_price (e.g., 100)
     };
     selectedFood.value.push(newItem);
+    showNotification(`${food.name} added to cart!`);
   }
   saveToLocalStorage();
 };
@@ -383,7 +422,20 @@ watch(selectedFood, () => {
   saveToLocalStorage();
 }, { deep: true });
 </script>
+
 <style scoped>
+/* Notification Styles */
+.notification-enter-active,
+.notification-leave-active {
+  transition: all 0.3s ease;
+}
+
+.notification-enter-from,
+.notification-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
 /* Scroll Margin for Header Offset */
 .scroll-mt-20 {
   scroll-margin-top: 5rem;
