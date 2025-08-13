@@ -7,237 +7,67 @@
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <!-- Flash Message if any -->
-        <FlashMessage
-          v-if="$page.props.flash.success"
-          :message="$page.props.flash.success"
-          class="mb-4"
-        />
+        <FlashMessage v-if="$page.props.flash.success" :message="$page.props.flash.success" class="mb-4" />
 
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
           <form @submit.prevent="submit" class="p-6 space-y-6">
             <!-- Basic Information Section -->
             <div class="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg">
-              <h3
-                class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4"
-              >Basic Information</h3>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Basic Information</h3>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Name -->
-                <div class="col-span-2">
+                <div class="col-span-1">
                   <InputLabel for="name" value="Food Name" required />
-                  <TextInput
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                  />
+                  <TextInput id="name" v-model="form.name" type="text" class="mt-1 block w-full" required autofocus />
                   <InputError :message="form.errors.name" class="mt-2" />
                 </div>
 
-                <!-- Branch -->
-                <div>
-                  <InputLabel for="branch_id" value="Branch" required />
-                  <select
-                    id="branch_id"
-                    v-model="form.branch_id"
-                    class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                    required
-                  >
-                    <option value>Select Branch</option>
-                    <option
-                      v-for="branch in branches"
-                      :key="branch.id"
-                      :value="branch.id"
-                    >{{ branch.name }}</option>
-                  </select>
-                  <InputError :message="form.errors.branch_id" class="mt-2" />
-                </div>
-
                 <!-- Category -->
-                <div>
+                <div class="col-span-1">
                   <InputLabel for="category_id" value="Category" required />
-                  <select
-                    id="category_id"
-                    v-model="form.category_id"
+                  <select id="category_id" v-model="form.category_id"
                     class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                    required
-                  >
+                    required>
                     <option value>Select Category</option>
-                    <option
-                      v-for="category in categories"
-                      :key="category.id"
-                      :value="category.id"
-                    >{{ category.name }}</option>
+                    <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}
+                    </option>
                   </select>
                   <InputError :message="form.errors.category_id" class="mt-2" />
-                </div>
-
-                <!-- Description -->
-                <div class="col-span-2">
-                  <InputLabel for="description" value="Description" />
-                  <TextArea
-                    id="description"
-                    v-model="form.description"
-                    class="mt-1 block w-full"
-                    rows="3"
-                  />
-                  <InputError :message="form.errors.description" class="mt-2" />
                 </div>
               </div>
             </div>
 
             <!-- Pricing and Preparation Section -->
             <div class="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg">
-              <h3
-                class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4"
-              >Pricing and Preparation</h3>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Pricing and Preparation</h3>
 
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                <div>
+                  <InputLabel for="branch_id" value="Branch" required />
+                  <select id="branch_id" v-model="form.branch_id"
+                    class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                    required>
+                    <option value>Select Branch</option>
+                    <option v-for="branch in branches" :key="branch.id" :value="branch.id">{{ branch.name }}</option>
+                  </select>
+                  <InputError :message="form.errors.branch_id" class="mt-2" />
+                </div>
                 <!-- Base Price -->
                 <div>
-                  <InputLabel for="full" value="Price-Full(৳)" required />
-                  <TextInput
-                    id="base_price"
-                    v-model="form.base_price"
-                    type="number"
-                    step="0.01"
-                    class="mt-1 block w-full"
-                    required
-                  />
+                  <InputLabel for="base_price" value="Price(৳)" required />
+                  <TextInput id="base_price" v-model="form.base_price" type="number" step="0.01"
+                    class="mt-1 block w-full" required />
                   <InputError :message="form.errors.base_price" class="mt-2" />
-                </div>
-                <div>
-                  <InputLabel for="half_price" value="Price-Half(৳)" required />
-                  <TextInput
-                    id="half_price"
-                    v-model="form.half_price"
-                    type="number"
-                    step="0.01"
-                    class="mt-1 block w-full"
-                    required
-                  />
-                  <InputError :message="form.errors.half_price" class="mt-2" />
                 </div>
 
                 <!-- Preparation Time -->
                 <div>
                   <InputLabel for="preparation_time" value="Preparation Time (minutes)" required />
-                  <TextInput
-                    id="preparation_time"
-                    v-model="form.preparation_time"
-                    type="number"
-                    min="1"
-                    class="mt-1 block w-full"
-                    required
-                  />
+                  <TextInput id="preparation_time" v-model="form.preparation_time" type="number" min="1"
+                    class="mt-1 block w-full" required />
                   <InputError :message="form.errors.preparation_time" class="mt-2" />
-                </div>
-              </div>
-            </div>
-
-            <!-- Extra Options Section -->
-            <div class="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg">
-              <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Extra Options</h3>
-                <button
-                  type="button"
-                  @click="addExtraOption"
-                  class="inline-flex items-center px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-md transition-colors duration-200 dark:bg-indigo-900/50 dark:hover:bg-indigo-800/50 dark:text-indigo-300"
-                >
-                  <i class="fas fa-plus mr-1.5"></i>
-                  Add Option
-                </button>
-              </div>
-
-              <!-- Extra Options List -->
-              <div class="space-y-4">
-                <div
-                  v-for="(option, index) in form.extra_options"
-                  :key="option.tempId"
-                  class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4"
-                >
-                  <div class="flex items-start space-x-4">
-                    <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <!-- Name -->
-                      <div>
-                        <InputLabel :for="`option-name-${index}`" value="Option Name" required />
-                        <TextInput
-                          :id="`option-name-${index}`"
-                          v-model="option.name"
-                          type="text"
-                          class="mt-1 block w-full"
-                          required
-                        />
-                      </div>
-
-                      <!-- Price -->
-                      <div>
-                        <InputLabel :for="`option-price-${index}`" value="Price" required />
-                        <div class="mt-1 relative rounded-md shadow-sm">
-                          <div
-                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                          >
-                            <span class="text-gray-500 dark:text-gray-400 sm:text-sm">$</span>
-                          </div>
-                          <TextInput
-                            :id="`option-price-${index}`"
-                            v-model="option.price"
-                            type="number"
-                            step="0.01"
-                            class="pl-7 block w-full"
-                            required
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Actions -->
-                    <div class="flex items-center space-x-3">
-                      <Toggle
-                        v-model="option.is_available"
-                        :label="`Option ${index + 1} Availability`"
-                      />
-
-                      <button
-                        type="button"
-                        @click="moveOption(index, -1)"
-                        class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                        :disabled="index === 0"
-                      >
-                        <i class="fas fa-arrow-up"></i>
-                      </button>
-
-                      <button
-                        type="button"
-                        @click="moveOption(index, 1)"
-                        class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                        :disabled="index === form.extra_options.length - 1"
-                      >
-                        <i class="fas fa-arrow-down"></i>
-                      </button>
-
-                      <button
-                        type="button"
-                        @click="removeExtraOption(index)"
-                        class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-                      >
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Empty State -->
-                <div
-                  v-if="!form.extra_options.length"
-                  class="text-center py-8 bg-white dark:bg-gray-800 rounded-lg border border-dashed border-gray-300 dark:border-gray-600"
-                >
-                  <i class="fas fa-list text-gray-400 text-3xl mb-3"></i>
-                  <p
-                    class="text-sm text-gray-500 dark:text-gray-400"
-                  >No extra options added yet. Add options like sizes, toppings, or customizations.</p>
                 </div>
               </div>
             </div>
@@ -248,48 +78,27 @@
 
               <div class="flex items-center space-x-6">
                 <div class="flex-shrink-0">
-                  <img
-                    v-if="imagePreview"
-                    :src="imagePreview"
-                    class="h-32 w-32 object-cover rounded-lg"
-                  />
-                  <img
-                    v-else-if="food?.image_path"
-                    :src="getImageUrl(food.image_path)"
-                    class="h-32 w-32 object-cover rounded-lg"
-                  />
-                  <div
-                    v-else
-                    class="h-32 w-32 rounded-lg bg-gray-100 dark:bg-gray-700 border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center"
-                  >
+                  <img v-if="imagePreview" :src="imagePreview" class="h-32 w-32 object-cover rounded-lg" />
+                  <img v-else-if="food?.image_path" :src="getImageUrl(food.image_path)"
+                    class="h-32 w-32 object-cover rounded-lg" />
+                  <div v-else
+                    class="h-32 w-32 rounded-lg bg-gray-100 dark:bg-gray-700 border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center">
                     <i class="fas fa-camera text-gray-400 dark:text-gray-500 text-3xl"></i>
                   </div>
                 </div>
 
                 <div class="flex-1">
-                  <input
-                    type="file"
-                    ref="imageInput"
-                    @change="handleImageChange"
-                    accept="image/*"
-                    class="hidden"
-                  />
+                  <input type="file" ref="imageInput" @change="handleImageChange" accept="image/*" class="hidden" />
                   <div class="space-y-2">
-                    <SecondaryButton
-                      type="button"
-                      @click="$refs.imageInput.click()"
-                    >{{ imagePreview || food?.image_path ? 'Change Image' : 'Select Image' }}</SecondaryButton>
+                    <SecondaryButton type="button" @click="$refs.imageInput.click()">{{ imagePreview || food?.image_path
+                      ?
+                      'Change Image' : 'Select Image' }}</SecondaryButton>
 
-                    <p
-                      class="text-sm text-gray-500 dark:text-gray-400"
-                    >Recommended size: 800x600 pixels</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Recommended size: 800x600 pixels</p>
 
-                    <button
-                      v-if="imagePreview || food?.image_path"
-                      type="button"
-                      @click="removeImage"
-                      class="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-                    >Remove Image</button>
+                    <button v-if="imagePreview || food?.image_path" type="button" @click="removeImage"
+                      class="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">Remove
+                      Image</button>
                   </div>
                   <InputError :message="form.errors.image" class="mt-2" />
                 </div>
@@ -300,12 +109,9 @@
             <div class="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg">
               <div class="flex items-center justify-between">
                 <div>
-                  <h3
-                    class="text-lg font-medium text-gray-900 dark:text-gray-100"
-                  >Availability Status</h3>
-                  <p
-                    class="text-sm text-gray-500 dark:text-gray-400"
-                  >Control whether this food item is available for ordering</p>
+                  <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Availability Status</h3>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Control whether this food item is available for
+                    ordering</p>
                 </div>
                 <Toggle v-model="form.is_available" :label="'Food Availability'" />
               </div>
@@ -313,12 +119,10 @@
 
             <!-- Form Actions -->
             <div class="flex items-center justify-end space-x-4">
-              <Link
-                :href="route('admin.foods.index')"
-                class="inline-flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest hover:bg-gray-200 dark:hover:bg-gray-700 active:bg-gray-300 dark:active:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
-              >
-                <i class="fas fa-arrow-left mr-2"></i>
-                Back to List
+              <Link :href="route('admin.foods.index')"
+                class="inline-flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest hover:bg-gray-200 dark:hover:bg-gray-700 active:bg-gray-300 dark:active:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">
+              <i class="fas fa-arrow-left mr-2"></i>
+              Back to List
               </Link>
 
               <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">

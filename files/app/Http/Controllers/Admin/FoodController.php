@@ -50,6 +50,11 @@ class FoodController extends Controller
         ]);
     }
 
+    public function foodByBranch($branch_id){
+        $foodsByBranch = DB::table('food')->where('branch_id', $branch_id)->select('id', 'name', 'base_price')->get();
+        return response()->json($foodsByBranch);
+    }
+
 
     public function create()
     {
@@ -96,6 +101,7 @@ class FoodController extends Controller
                 ->with('success', 'Food item created successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
+            logger($e->getMessage());
             if (isset($validated['image_path'])) {
                 Storage::disk('public')->delete($validated['image_path']);
             }

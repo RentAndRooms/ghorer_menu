@@ -1,6 +1,6 @@
 <template>
   <CustomerLayout>
-    <div class="max-w-6xl mx-auto px-6 py-10 bg-white dark:bg-gray-900 rounded-2xl shadow-lg">
+    <div class="max-w-8xl mx-auto mx-8 px-6 py-10 bg-white dark:bg-gray-900 rounded-2xl shadow-lg">
       <h1
         class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6 border-b border-gray-200 dark:border-gray-700 pb-3">
         About Us

@@ -18,6 +18,7 @@ use App\Http\Controllers\CustomerOrderController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\BranchSelectionController;
 use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\SslCommerzPaymentController;
 
 Route::get('track', function (Request $request) {
@@ -120,6 +121,11 @@ Route::middleware(['auth', 'not-customer'])->prefix('admin')->name('admin.')->gr
     Route::resource('branches', BranchController::class);
     Route::resource('locals', LocalAreaController::class);
     Route::resource('foods', FoodController::class);
+
+    Route::get('branch_food/{branch_id}', [FoodController::class, 'foodByBranch'])->name('food_by_branch');
+
+    Route::get('package', [PackageController::class, 'index']);
+    Route::get('package/create', [PackageController::class, 'create'])->name('package.create');
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');

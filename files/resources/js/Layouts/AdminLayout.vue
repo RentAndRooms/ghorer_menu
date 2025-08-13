@@ -171,6 +171,13 @@ const navItems = ref([
     canAccess: (user.role == 'super_admin' || user.role == 'branch_admin')
   },
   {
+    name: 'Package',
+    link: '/admin/package',
+    icon: 'M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z', // SVG path data for a square icon
+    isActive: false,
+    canAccess: (user.role == 'super_admin')
+  },
+  {
     name: 'Orders',
     link: '/admin/orders',
     icon: 'M4 7V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2m0 0H4m16 0v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7h16z', // SVG path data for a square icon
@@ -191,6 +198,7 @@ const navItems = ref([
     isActive: false,
     canAccess: (user.role == 'super_admin')
   },
+
 
 
   // {

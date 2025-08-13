@@ -29,7 +29,7 @@ class FoodRequest extends FormRequest
             'base_price' => 'required|numeric|min:0',
             'preparation_time' => 'required|integer|min:1',
             // 'image' => $this->isMethod('POST') ? 'required|image|max:2048' : 'nullable|image|max:2048',
-            'half_price'=> 'sometimes|numeric',
+            'half_price'=> 'sometimes',
             'allergens' => 'nullable|array',
             'allergens.*' => 'string',
             'is_available' => 'boolean',
