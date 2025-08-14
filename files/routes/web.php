@@ -128,6 +128,8 @@ Route::middleware(['auth', 'not-customer'])->prefix('admin')->name('admin.')->gr
     Route::get('package', [PackageController::class, 'index'])->name('package.index');
     Route::get('package/create', [PackageController::class, 'create'])->name('package.create');
     Route::post('package/create', [PackageController::class, 'store']);
+
+    Route::get('package/edit/{package}', [PackageController::class, 'edit'])->name('package.edit');
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');

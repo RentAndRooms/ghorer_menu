@@ -55,6 +55,10 @@ class Branch extends Model
         ]);
     }
 
+    public function packages(){
+        return $this->hasMany(Package::class);
+    }
+
     /**
      * Scope a query to only include branches within a certain distance
      */

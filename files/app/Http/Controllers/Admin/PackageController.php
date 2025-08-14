@@ -12,7 +12,8 @@ use Exception;
 class PackageController extends Controller
 {
     public function index(){
-        return Inertia::render('Admin/Packages/Index');
+        $packages = Package::with(['foods', 'branch', 'category'])->paginate(10);
+        return Inertia::render('Admin/Packages/Index', compact(['packages']));
     }
 
     public function create(){

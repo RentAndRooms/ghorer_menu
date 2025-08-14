@@ -1,5 +1,5 @@
 <template>
-    <AdminLayout title="Branches">
+    <AdminLayout title="packages">
         <div class="flex justify-between items-center">
             <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Package Management</h2>
             <Link v-if="props.auth.user.role == 'super_admin'" :href="route('admin.package.create')"
@@ -15,78 +15,68 @@
                         <!-- Flash Messages -->
                         <FlashMessage v-if="flash.success" :message="flash.success" class="mb-4" />
 
-                        <!-- Branches Table -->
-                        <div v-if="branches.data.length > 0" class="overflow-x-auto">
+                        <!-- packages Table -->
+                        <div v-if="true" class="overflow-x-auto">
                             <table class="w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead class="bg-gray-50 dark:bg-gray-700/50">
                                     <tr>
                                         <th scope="col"
                                             class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            Restuarent Name</th>
+                                            Name</th>
                                         <th scope="col"
                                             class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            Address</th>
+                                            Items</th>
                                         <th scope="col"
                                             class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider w-32">
-                                            Foods Count</th>
+                                            Branch</th>
                                         <th scope="col"
                                             class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider w-32">
-                                            Status</th>
+                                            Category</th>
+                                        <th scope="col"
+                                            class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider w-32">
+                                            Image</th>
                                         <th scope="col"
                                             class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider w-40">
                                             Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                                    <tr v-for="branch in branches.data" :key="branch.id"
+                                    <tr v-for="pack in packages.data" :key="pack.id"
                                         class="group transition-colors duration-150 hover:bg-gray-50/90 dark:hover:bg-gray-700/50">
                                         <td class="px-6 py-4">
                                             <div class="text-sm font-medium text-gray-900 dark:text-white">{{
-                                                branch.name }}</div>
+                                                pack.name }}</div>
                                             <div class="text-sm text-gray-500 dark:text-gray-400">{{
-                                                branch.contact_number }}</div>
+                                                pack.contact_number }}</div>
                                         </td>
                                         <td class="px-6 py-4">
-                                            <div class="text-sm text-gray-900 dark:text-gray-100">{{ branch.address }}
+                                            <div class="flex flex-wrap gap-2">
+                                                <span v-for="item in pack.foods" :key="item.id"
+                                                    class="bg-gray-100 text-green-600 px-2 py-1 rounded">
+                                                    {{ item.name }}
+                                                </span>
                                             </div>
-                                            <div class="text-xs text-gray-500 dark:text-gray-400">{{
-                                                branch.delivery_radius }}km radius</div>
                                         </td>
                                         <td class="px-6 py-4">
                                             <div
                                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
-                                                {{ branch.foods_count }}
-                                                <span class="ml-1 text-gray-500 dark:text-gray-400">items</span>
+                                                {{ pack.branch.name }}
                                             </div>
                                         </td>
                                         <td class="px-6 py-4">
-                                            <span :class="[
-                                                'inline-flex items-center px-3 py-1 rounded-full text-xs font-medium',
-                                                branch.is_active
-                                                    ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300 border border-green-200 dark:border-green-800'
-                                                    : 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300 border border-red-200 dark:border-red-800'
-                                            ]">
-                                                <span class="relative flex h-2 w-2 mr-2">
-                                                    <span :class="[
-                                                        'animate-ping absolute inline-flex h-full w-full rounded-full opacity-75',
-                                                        branch.is_active ? 'bg-green-400 dark:bg-green-500' : 'bg-red-400 dark:bg-red-500'
-                                                    ]"></span>
-                                                    <span :class="[
-                                                        'relative inline-flex rounded-full h-2 w-2',
-                                                        branch.is_active ? 'bg-green-500 dark:bg-green-400' : 'bg-red-500 dark:bg-red-400'
-                                                    ]"></span>
-                                                </span>
-                                                {{ branch.is_active ? 'Active' : 'Inactive' }}
-                                            </span>
+                                            <p>{{ pack.category.name }}</p>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <img src="" alt="">
                                         </td>
                                         <td class="px-6 py-4">
                                             <div class="flex items-center space-x-4">
-                                                <Link :href="route('admin.branches.edit', branch.id)"
+                                                <Link :href="route('admin.package.edit', pack.id)"
                                                     class="inline-flex items-center px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 active:bg-indigo-200 dark:bg-indigo-900/50 dark:hover:bg-indigo-800/50 text-indigo-600 dark:text-indigo-300 rounded-md transition-colors duration-200">
                                                 <i class="fas fa-edit text-xs mr-1.5"></i>
                                                 <span>Edit</span>
                                                 </Link>
-                                                <button @click="confirmDelete(branch)"
+                                                <button @click="confirmDelete(pack)"
                                                     class="inline-flex items-center px-3 py-1.5 bg-red-50 hover:bg-red-100 active:bg-red-200 dark:bg-red-900/50 dark:hover:bg-red-800/50 text-red-600 dark:text-red-300 rounded-md transition-colors duration-200">
                                                     <i class="fas fa-trash text-xs mr-1.5"></i>
                                                     <span>Delete</span>
@@ -103,7 +93,7 @@
                             <i class="fas fa-store text-gray-400 text-5xl mb-4"></i>
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">No Package Found</h3>
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Get started by creating a new
-                                branch.</p>
+                                package.</p>
                             <div class="mt-6">
                                 <Link :href="route('admin.package.create')"
                                     class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md">
@@ -114,9 +104,9 @@
                         </div>
 
                         <!-- Pagination -->
-                        <div v-if="branches.data.length > 0" class="mt-4">
-                            <SimplePagination :links="branches.meta.links" :meta="branches.meta" />
-                        </div>
+                        <!-- <div v-if="packages.data.length > 0" class="mt-4">
+                            <SimplePagination :links="packages.meta.links" :meta="packages.meta" />
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -132,7 +122,7 @@
                 <div class="mt-6 flex justify-end space-x-3">
                     <SecondaryButton @click="showDeleteModal = false">Cancel</SecondaryButton>
                     <DangerButton class="ml-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
-                        @click="deleteBranch">Delete Branch</DangerButton>
+                        @click="deletePackage">Delete Package</DangerButton>
                 </div>
             </div>
         </Modal>
@@ -150,7 +140,7 @@ import SecondaryButton from "@/Components/SecondaryButton.vue";
 import DangerButton from "@/Components/DangerButton.vue";
 
 const props = defineProps({
-    branches: {
+    packages: {
         type: Object,
         required: true,
         default: () => ({
@@ -183,21 +173,21 @@ const props = defineProps({
 });
 
 const showDeleteModal = ref(false);
-const branchToDelete = ref(null);
+const packageToDelete = ref(null);
 const form = useForm({});
 
-const confirmDelete = (branch) => {
-    branchToDelete.value = branch;
+const confirmDelete = (pack) => {
+    packageToDelete.value = pack;
     showDeleteModal.value = true;
 };
 
-const deleteBranch = () => {
-    if (branchToDelete.value) {
-        form.delete(route("admin.branches.destroy", branchToDelete.value.id), {
+const deletepackage = () => {
+    if (packageToDelete.value) {
+        form.delete(route("admin.package.destroy", packageToDelete.value.id), {
             preserveScroll: true,
             onSuccess: () => {
                 showDeleteModal.value = false;
-                branchToDelete.value = null;
+                packageToDelete.value = null;
             },
         });
     }
