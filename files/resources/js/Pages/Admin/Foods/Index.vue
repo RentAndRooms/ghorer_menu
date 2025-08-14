@@ -229,6 +229,7 @@ import SecondaryButton from '@/Components/SecondaryButton.vue'
 import DangerButton from '@/Components/DangerButton.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 
+
 const props = defineProps({
   foods: {
     type: Object,
@@ -282,8 +283,10 @@ const confirmDelete = (food) => {
 const deleteFood = () => {
   if (!selectedFood.value) return
 
+  const formInstance = useForm({});
+
   processing.value = true
-  useForm().delete(route('admin.foods.destroy', selectedFood.value.id), {
+  formInstance.delete(route('admin.foods.destroy', selectedFood.value.id), {
     preserveScroll: true,
     onSuccess: () => {
       showDeleteModal.value = false

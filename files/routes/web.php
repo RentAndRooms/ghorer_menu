@@ -20,6 +20,7 @@ use App\Http\Controllers\BranchSelectionController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\SslCommerzPaymentController;
+use Illuminate\Foundation\PackageManifest;
 
 Route::get('track', function (Request $request) {
     $location = Location::get('5.162.104.224');
@@ -124,8 +125,9 @@ Route::middleware(['auth', 'not-customer'])->prefix('admin')->name('admin.')->gr
 
     Route::get('branch_food/{branch_id}', [FoodController::class, 'foodByBranch'])->name('food_by_branch');
 
-    Route::get('package', [PackageController::class, 'index']);
+    Route::get('package', [PackageController::class, 'index'])->name('package.index');
     Route::get('package/create', [PackageController::class, 'create'])->name('package.create');
+    Route::post('package/create', [PackageController::class, 'store']);
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');

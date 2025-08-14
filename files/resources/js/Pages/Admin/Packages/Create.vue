@@ -13,7 +13,8 @@
                     <form @submit.prevent="submit" class="p-6 space-y-6">
                         <!-- Basic Information Section -->
                         <div class="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Basic Information</h3>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Package Information
+                            </h3>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <!-- Name -->
@@ -49,8 +50,8 @@
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                                 <div>
-                                    <InputLabel for="branch_id" value="Branch" required />
-                                    <select id="branch_id" v-model="form.branch_id" @change="handleBranchChange"
+                                    <InputLabel for="branche_id" value="Branch" required />
+                                    <select id="branche_id" v-model="form.branche_id" @change="handleBranchChange"
                                         class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                                         required>
                                         <option value>Select Branch</option>
@@ -58,7 +59,7 @@
                                             branch.name }}
                                         </option>
                                     </select>
-                                    <InputError :message="form.errors.branch_id" class="mt-2" />
+                                    <InputError :message="form.errors.branche_id" class="mt-2" />
                                 </div>
                                 <!-- Base Price -->
                                 <div>
@@ -79,7 +80,7 @@
                             <div class="grid grid-cols-4 gap-4 mt-4" v-if="branch_foods.length > 0">
                                 <div v-for="food in branch_foods" :key="food.id" class="mb-2">
                                     <label class="inline-flex items-center">
-                                        <input type="checkbox" :value="food.id" v-model="selectedfoodIds"
+                                        <input type="checkbox" :value="food.id" v-model="form.selectedFoods"
                                             class="form-checkbox h-5 w-5 text-blue-600">
                                         <span class="ml-2 text-gray-700">
                                             {{ food.name }} (Price: {{ food.base_price }})
@@ -87,10 +88,12 @@
                                     </label>
                                 </div>
                             </div>
-
                             <div v-else-if="show && branch_foods.length <= 0" class="mt-4 text-red-400">Create Food For
                                 The
                                 ResTuarent Fist</div>
+                            <div v-if="totalPrice > 0" class="mt-4 font-bold">
+                                Total Price: {{ totalPrice }}
+                            </div>
                         </div>
 
                         <!-- Image Upload Section -->
@@ -187,6 +190,10 @@ const branch_foods = ref([]);
 let show = ref(false);
 
 const props = defineProps({
+    food: {
+        type: Array,
+        required: true
+    },
     categories: {
         type: Array,
         required: true,
@@ -197,6 +204,26 @@ const props = defineProps({
     },
 });
 
+const totalPrice = computed(() => {
+    // Ensure branch_foods and selectedFoods are valid arrays
+    if (!Array.isArray(branch_foods.value) || !Array.isArray(form.selectedFoods)) {
+        return 0;
+    }
+
+    return branch_foods.value
+        .filter(food =>
+            // Ensure food has an id and is selected
+            food && typeof food.id !== 'undefined' && form.selectedFoods.includes(food.id)
+        )
+        .reduce((sum, food) => {
+            // Convert base_price to a number, default to 0 if invalid
+            const price = parseFloat(food.base_price) || 0;
+            return sum + price;
+        }, 0)
+        .toFixed(2); // Ensure two decimal places for currency
+});
+
+
 const title = computed(() =>
     props.food ? "Edit Food Item" : "Create Food Item"
 );
@@ -205,15 +232,17 @@ const imagePreview = ref(null);
 
 const form = useForm({
     name: props.food?.name ?? "",
-    branch_id: props.food?.branch_id ?? "",
+    branche_id: props.food?.branche_id ?? "",
     category_id: props.food?.category_id ?? "",
     description: props.food?.description ?? "",
     base_price: props.food?.base_price ?? "",
     half_price: props.food?.half_price ?? "",
     preparation_time: props.food?.preparation_time ?? 30,
     is_vegetarian: props.food?.is_vegetarian ?? false,
+    selectedFoods: props.food?.selectedFoods ?? [],
     is_spicy: props.food?.is_spicy ?? false,
     allergens: props.food?.allergens ?? [],
+
     image: null,
     is_available: props.food?.is_available ?? true,
     extra_options: (props.food?.extra_options ?? []).map((option) => ({
@@ -224,7 +253,7 @@ const form = useForm({
 
 const handleBranchChange = async () => {
     try {
-        const branchId = form.branch_id;
+        const branchId = form.branche_id;
         const response = await axios.get(`/admin/branch_food/${branchId}`);
         branch_foods.value = response.data;
         show = true;
@@ -312,8 +341,9 @@ const submit = () => {
             },
         });
     } else {
-        form.post(route("admin.foods.store"), {
+        form.post(route("admin.package.create"), {
             onSuccess: () => {
+                console.log('Server data:', page.props.flash, page.props)
                 form.reset();
                 imagePreview.value = null;
             },

@@ -13,7 +13,7 @@
           <form @submit.prevent="submit" class="p-6 space-y-6">
             <!-- Basic Information Section -->
             <div class="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg">
-              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Basic Information</h3>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Food Information</h3>
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Name -->

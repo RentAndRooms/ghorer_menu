@@ -16,7 +16,6 @@ class FoodController extends Controller
 {
     public function index()
     {
-
         if (auth()->user()->role == 'super_admin') {
             $foods = Food::with(['category', 'branch', 'extraOptions'])
                 ->withCount('extraOptions')
@@ -194,6 +193,7 @@ class FoodController extends Controller
             return back()->with('success', 'Food item deleted successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
+            logger($e->getMessage());
             return back()->with('error', 'Error deleting food item. Please try again.');
         }
     }

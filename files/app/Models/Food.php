@@ -41,6 +41,10 @@ class Food extends Model
         return $this->belongsTo(Branch::class);
     }
 
+    public function packages(){
+        return $this->belongsToMany(Package::class, 'package_food');
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
