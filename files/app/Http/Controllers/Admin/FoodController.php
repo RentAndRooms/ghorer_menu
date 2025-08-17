@@ -50,7 +50,7 @@ class FoodController extends Controller
     }
 
     public function foodByBranch($branch_id){
-        $foodsByBranch = DB::table('food')->where('branch_id', $branch_id)->select('id', 'name', 'base_price')->get();
+        $foodsByBranch = DB::table('food')->where('branch_id', $branch_id)->select('id', 'name', 'base_price', 'category_id')->get();
         return response()->json($foodsByBranch);
     }
 

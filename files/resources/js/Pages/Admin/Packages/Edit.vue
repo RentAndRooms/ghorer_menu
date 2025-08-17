@@ -159,7 +159,7 @@
 
                             <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                                 <i class="fas fa-save mr-2"></i>
-                                {{ food ? 'Update Package' : 'Create Package' }}
+                                {{ packageData ? 'Update Package' : 'Create Package' }}
                             </PrimaryButton>
                         </div>
                     </form>
@@ -192,10 +192,6 @@ const show = ref(false)
 const page = usePage()
 
 const props = defineProps({
-    food: {
-        type: Array,
-        required: true
-    },
     categories: {
         type: Array,
         required: true,
@@ -204,7 +200,12 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    packageData: {
+        type: Array,
+        required: true
+    }
 });
+
 
 const totalPrice = computed(() => {
     // Ensure branch_foods and selectedFoods are valid arrays
@@ -226,20 +227,31 @@ const totalPrice = computed(() => {
 });
 
 const branch_foods = computed(() => {
-    if (!allBranchFoods.value.length) return []
+    let foods = []
 
-    let foods = allBranchFoods.value
+    // If we have branch foods
+    if (allBranchFoods.value.length) {
+        foods = allBranchFoods.value
+    }
 
-    console.log(form.category_id, 'check');
+    // If editing, ensure package foods are also included
+    if (props.packageData?.foods?.length) {
+        const existingIds = foods.map(f => f.id)
+        props.packageData.foods.forEach(f => {
+            if (!existingIds.includes(f.id)) {
+                foods.push(f)
+            }
+        })
+    }
 
-    console.log(foods);
-
+    // Apply category filter
     if (form.category_id) {
         foods = foods.filter(food => food.category_id == form.category_id)
     }
 
     return foods
 })
+
 
 
 const title = computed(() =>
@@ -249,21 +261,20 @@ const imageInput = ref(null);
 const imagePreview = ref(null);
 
 const form = useForm({
-    name: props.food?.name ?? "",
-    branche_id: props.food?.branche_id ?? "",
-    category_id: props.food?.category_id ?? "",
-    description: props.food?.description ?? "",
-    base_price: props.food?.base_price ?? "",
-    half_price: props.food?.half_price ?? "",
-    preparation_time: props.food?.preparation_time ?? 30,
-    is_vegetarian: props.food?.is_vegetarian ?? false,
-    selectedFoods: props.food?.selectedFoods ?? [],
-    is_spicy: props.food?.is_spicy ?? false,
-    allergens: props.food?.allergens ?? [],
+    name: props.packageData?.name ?? "",
+    branche_id: props.packageData?.branche_id ?? "",
+    category_id: props.packageData?.category_id ?? "",
+    description: props.packageData?.description ?? "",
+    base_price: props.packageData?.base_price ?? "",
+    preparation_time: props.packageData?.preparation_time ?? 30,
+    is_vegetarian: props.packageData?.is_vegetarian ?? false,
+    selectedFoods: props.packageData?.foods?.map(food => food.id) ?? [],
+    is_spicy: props.packageData?.is_spicy ?? false,
+    allergens: props.packageData?.allergens ?? [],
 
     image: null,
-    is_available: props.food?.is_available ?? true,
-    extra_options: (props.food?.extra_options ?? []).map((option) => ({
+    is_available: props.packageData?.is_available ?? true,
+    extra_options: (props.packageData?.extra_options ?? []).map((option) => ({
         ...option,
         tempId: uuidv4(),
     })),
@@ -353,8 +364,8 @@ const removeAllergen = (index) => {
 
 // Form submission
 const submit = () => {
-    if (props.food) {
-        form.put(route("admin.foods.update", props.food.id), {
+    if (props.packageData) {
+        form.put(route("admin.package.update", props.packageData.id), {
             _method: "PUT",
             onSuccess: () => {
                 // Reset form state but keep edited data

@@ -14,7 +14,6 @@
                     <div class="p-6">
                         <!-- Flash Messages -->
                         <FlashMessage v-if="flash.success" :message="flash.success" class="mb-4" />
-
                         <!-- packages Table -->
                         <div v-if="true" class="overflow-x-auto">
                             <table class="w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -34,7 +33,7 @@
                                             Category</th>
                                         <th scope="col"
                                             class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider w-32">
-                                            Image</th>
+                                            Price</th>
                                         <th scope="col"
                                             class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider w-40">
                                             Actions</th>
@@ -67,7 +66,7 @@
                                             <p>{{ pack.category.name }}</p>
                                         </td>
                                         <td class="px-6 py-4">
-                                            <img src="" alt="">
+                                            <p>{{ pack.base_price }}</p>
                                         </td>
                                         <td class="px-6 py-4">
                                             <div class="flex items-center space-x-4">
@@ -115,9 +114,9 @@
         <!-- Delete Confirmation Modal -->
         <Modal :show="showDeleteModal" @close="showDeleteModal = false">
             <div class="p-6">
-                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Delete Restuarent</h2>
+                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Delete Package</h2>
                 <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Are you sure you want to delete this
-                    restuarent? This
+                    Package? This
                     action cannot be undone.</p>
                 <div class="mt-6 flex justify-end space-x-3">
                     <SecondaryButton @click="showDeleteModal = false">Cancel</SecondaryButton>
@@ -160,7 +159,7 @@ const props = defineProps({
     flash: {
         type: Object,
         default: () => ({
-            success: null,
+            message: null,
             error: null,
         }),
     },
@@ -174,6 +173,7 @@ const props = defineProps({
 
 const showDeleteModal = ref(false);
 const packageToDelete = ref(null);
+const processing = ref(false)
 const form = useForm({});
 
 const confirmDelete = (pack) => {
@@ -181,13 +181,15 @@ const confirmDelete = (pack) => {
     showDeleteModal.value = true;
 };
 
-const deletepackage = () => {
+const deletePackage = () => {
     if (packageToDelete.value) {
+        processing.value = true
         form.delete(route("admin.package.destroy", packageToDelete.value.id), {
             preserveScroll: true,
             onSuccess: () => {
                 showDeleteModal.value = false;
                 packageToDelete.value = null;
+                processing.value = false;
             },
         });
     }

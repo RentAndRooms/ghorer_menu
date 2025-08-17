@@ -33,8 +33,7 @@
                                         required>
                                         <option value>Select Category</option>
                                         <option v-for="category in categories" :key="category.id" :value="category.id">
-                                            {{
-                                                category.name }}
+                                            {{ category.name }}
                                         </option>
                                     </select>
                                     <InputError :message="form.errors.category_id" class="mt-2" />
@@ -48,7 +47,6 @@
                                 Preparation</h3>
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
                                 <div>
                                     <InputLabel for="branche_id" value="Branch" required />
                                     <select id="branche_id" v-model="form.branche_id" @change="handleBranchChange"
@@ -77,19 +75,21 @@
                                     <InputError :message="form.errors.preparation_time" class="mt-2" />
                                 </div>
                             </div>
-                            <div class="grid grid-cols-4 gap-4 mt-4" v-if="branch_foods.length > 0">
-                                <div v-for="food in branch_foods" :key="food.id" class="mb-2">
-                                    <label class="inline-flex items-center">
-                                        <input type="checkbox" :value="food.id" v-model="form.selectedFoods"
-                                            class="form-checkbox h-5 w-5 text-blue-600">
-                                        <span class="ml-2 text-gray-700">{{ food.name }} (Price: {{ food.base_price
-                                        }})</span>
-                                    </label>
+                            <div class="mt-4" v-if="branch_foods.length > 0">
+                                <InputLabel for="selected_foods" value="Select Foods" />
+                                <select id="selected_foods" v-model="form.selectedFoods" multiple
+                                    class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm h-32">
+                                    <option v-for="food in branch_foods" :key="food.id" :value="food.id">
+                                        {{ food.name }} (Price: {{ food.base_price }})
+                                    </option>
+                                </select>
+                                <div v-if="form.selectedFoods.length > 0"
+                                    class="mt-2 text-sm text-gray-700 dark:text-gray-300">
+                                    Selected Foods: {{ selectedFoodsNames }}
                                 </div>
                             </div>
-                            <div v-else-if="show && branch_foods.length <= 0" class="mt-4 text-red-400">
-                                Create Food For The Restaurant First
-                            </div>
+                            <div v-else-if="show && branch_foods.length <= 0" class="mt-4 text-red-400">Create Food For
+                                The Restaurant First</div>
                             <div v-if="totalPrice > 0" class="mt-4 font-bold">
                                 Total Price: {{ totalPrice }}
                             </div>
@@ -116,10 +116,7 @@
                                         class="hidden" />
                                     <div class="space-y-2">
                                         <SecondaryButton type="button" @click="$refs.imageInput.click()">{{ imagePreview
-                                            ||
-                                            food?.image_path
-                                            ?
-                                            'Change Image' : 'Select Image' }}</SecondaryButton>
+                                            || food?.image_path ? 'Change Image' : 'Select Image' }}</SecondaryButton>
 
                                         <p class="text-sm text-gray-500 dark:text-gray-400">Recommended size: 800x600
                                             pixels</p>
@@ -135,19 +132,17 @@
                         </div>
 
                         <!-- Availability Status Section -->
-                        <!-- <div class="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg">
+                        <div class="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg">
                             <div class="flex items-center justify-between">
                                 <div>
                                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Availability Status
                                     </h3>
                                     <p class="text-sm text-gray-500 dark:text-gray-400">Control whether this food item
-                                        is
-                                        available for
-                                        ordering</p>
+                                        is available for ordering</p>
                                 </div>
                                 <Toggle v-model="form.is_available" :label="'Food Availability'" />
                             </div>
-                        </div> -->
+                        </div>
 
                         <!-- Form Actions -->
                         <div class="flex items-center justify-end space-x-4">
@@ -169,10 +164,9 @@
     </AdminLayout>
 </template>
 
-
 <script setup>
 import { ref, computed } from "vue";
-import { Link, useForm, usePage } from "@inertiajs/vue3";
+import { Link, useForm } from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
@@ -185,11 +179,8 @@ import FlashMessage from "@/Components/FlashMessage.vue";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 
-const allBranchFoods = ref([])
-const show = ref(false)
-
-
-const page = usePage()
+const branch_foods = ref([]);
+let show = ref(false);
 
 const props = defineProps({
     food: {
@@ -225,22 +216,15 @@ const totalPrice = computed(() => {
         .toFixed(2); // Ensure two decimal places for currency
 });
 
-const branch_foods = computed(() => {
-    if (!allBranchFoods.value.length) return []
-
-    let foods = allBranchFoods.value
-
-    console.log(form.category_id, 'check');
-
-    console.log(foods);
-
-    if (form.category_id) {
-        foods = foods.filter(food => food.category_id == form.category_id)
+const selectedFoodsNames = computed(() => {
+    if (!Array.isArray(branch_foods.value) || !Array.isArray(form.selectedFoods)) {
+        return '';
     }
-
-    return foods
-})
-
+    return branch_foods.value
+        .filter(food => food && typeof food.id !== 'undefined' && form.selectedFoods.includes(food.id))
+        .map(food => food.name)
+        .join(', ');
+});
 
 const title = computed(() =>
     props.food ? "Edit Food Item" : "Create Food Item"
@@ -260,7 +244,6 @@ const form = useForm({
     selectedFoods: props.food?.selectedFoods ?? [],
     is_spicy: props.food?.is_spicy ?? false,
     allergens: props.food?.allergens ?? [],
-
     image: null,
     is_available: props.food?.is_available ?? true,
     extra_options: (props.food?.extra_options ?? []).map((option) => ({
@@ -269,20 +252,16 @@ const form = useForm({
     })),
 });
 
-
 const handleBranchChange = async () => {
     try {
-        const branchId = form.branche_id
-        const response = await axios.get(`/admin/branch_food/${branchId}`)
-        allBranchFoods.value = response.data
-        show.value = true
+        const branchId = form.branche_id;
+        const response = await axios.get(`/admin/branch_food/${branchId}`);
+        branch_foods.value = response.data;
+        show = true;
     } catch (error) {
-        console.log("Error fetching branch food:", error)
+        console.log('Error fetching branch food :', error);
     }
-}
-
-
-
+};
 
 // Extra options handling
 const addExtraOption = () => {
