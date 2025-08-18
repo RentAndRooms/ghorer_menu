@@ -1,9 +1,7 @@
 <template>
   <AdminLayout :title="title">
     <!-- Page Title -->
-    <h2
-      class="text-xl text-center font-semibold leading-tight text-gray-800 dark:text-gray-200"
-    >{{ title }}</h2>
+    <h2 class="text-xl text-center font-semibold leading-tight text-gray-800 dark:text-gray-200">{{ title }}</h2>
 
     <!-- Form Container -->
     <div class="py-12">
@@ -12,41 +10,24 @@
           <form @submit.prevent="submit" class="p-6 space-y-6">
             <!-- Basic Information Section -->
             <section class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
-              <h3
-                class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4"
-              >Basic Information</h3>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Basic Information</h3>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <InputLabel for="name" value="Branch Name" />
-                  <TextInput
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    class="mt-1 block w-full dark:bg-gray-900 dark:text-gray-300"
-                    required
-                  />
+                  <InputLabel for="name" value="Restuarent Name" />
+                  <TextInput id="name" v-model="form.name" type="text"
+                    class="mt-1 block w-full dark:bg-gray-900 dark:text-gray-300" required />
                   <InputError :message="form.errors.name" class="mt-2" />
                 </div>
                 <div>
                   <InputLabel for="contact_number" value="Contact Number" />
-                  <TextInput
-                    id="contact_number"
-                    v-model="form.contact_number"
-                    type="text"
-                    class="mt-1 block w-full dark:bg-gray-900 dark:text-gray-300"
-                    required
-                  />
+                  <TextInput id="contact_number" v-model="form.contact_number" type="text"
+                    class="mt-1 block w-full dark:bg-gray-900 dark:text-gray-300" required />
                   <InputError :message="form.errors.contact_number" class="mt-2" />
                 </div>
                 <div class="md:col-span-2">
                   <InputLabel for="address" value="Address" />
-                  <TextArea
-                    id="address"
-                    v-model="form.address"
-                    class="mt-1 block w-full dark:bg-gray-900 dark:text-gray-300"
-                    rows="2"
-                    required
-                  />
+                  <TextArea id="address" v-model="form.address"
+                    class="mt-1 block w-full dark:bg-gray-900 dark:text-gray-300" rows="2" required />
                   <InputError :message="form.errors.address" class="mt-2" />
                 </div>
               </div>
@@ -58,48 +39,12 @@
                 Location & Delivery
                 Area
               </h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="grid grid-cols-1 md:grid-cols-1">
                 <div>
-                  <InputLabel for="latitude" value="Latitude" />
-                  <TextInput
-                    id="latitude"
-                    v-model="form.latitude"
-                    type="number"
-                    step="any"
-                    class="mt-1 block w-full dark:bg-gray-900 dark:text-gray-300"
-                    required
-                  />
-                  <InputError :message="form.errors.latitude" class="mt-2" />
-                </div>
-                <div>
-                  <InputLabel for="longitude" value="Longitude" />
-                  <TextInput
-                    id="longitude"
-                    v-model="form.longitude"
-                    type="number"
-                    step="any"
-                    class="mt-1 block w-full dark:bg-gray-900 dark:text-gray-300"
-                    required
-                  />
-                  <InputError :message="form.errors.longitude" class="mt-2" />
-                </div>
-                <div class="md:col-span-2">
-                  <InputLabel for="delivery_radius" value="Delivery Radius (km)" />
-                  <div class="mt-1 flex items-center space-x-4">
-                    <input
-                      type="range"
-                      id="delivery_radius"
-                      v-model="form.delivery_radius"
-                      min="1"
-                      max="50"
-                      class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
-                    />
-                    <span class="text-sm text-gray-600 dark:text-gray-300 w-12">
-                      {{
-                      form.delivery_radius }}km
-                    </span>
-                  </div>
-                  <InputError :message="form.errors.delivery_radius" class="mt-2" />
+                  <InputLabel for="map_url" value="Google Map Url" />
+                  <TextInput id="map_url" v-model="form.map_url" type="text" step="any"
+                    class="mt-1 block w-full dark:bg-gray-900 dark:text-gray-300" required />
+                  <InputError :message="form.errors.map_url" class="mt-2" />
                 </div>
               </div>
             </section>
@@ -110,13 +55,9 @@
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div>
                   <InputLabel for="city_id" value="City" />
-                  <select
-                    id="city_id"
-                    v-model="form.district_id"
-                    @change="fetchAreas"
+                  <select id="city_id" v-model="form.district_id" @change="fetchAreas"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-900 dark:text-gray-300"
-                    required
-                  >
+                    required>
                     <option value>Select a city</option>
                     <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
                   </select>
@@ -124,12 +65,9 @@
                 </div>
                 <div>
                   <InputLabel for="thana_id" value="Area" />
-                  <select
-                    id="thana_id"
-                    v-model="form.thana_id"
+                  <select id="thana_id" v-model="form.thana_id"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-900 dark:text-gray-300"
-                    required
-                  >
+                    required>
                     <option value>Select an Area</option>
                     <option v-for="area in areas" :key="area.id" :value="area.id">{{ area.name }}</option>
                   </select>
@@ -137,15 +75,12 @@
                 </div>
                 <div>
                   <InputLabel for="local_id" value="Local" />
-                  <select
-                    id="local_id"
-                    v-model="form.local_id"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-900 dark:text-gray-300"
-                  >
+                  <select id="local_id" v-model="form.local_id"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-900 dark:text-gray-300">
                     <option value>Select a Local Area</option>
                     <option v-for="local in filterLocal" :key="local.id" :value="local.id">
                       {{
-                      local.name }}
+                        local.name }}
                     </option>
                   </select>
                   <InputError :message="form.errors.local_id" class="mt-2" />
@@ -160,48 +95,28 @@
                 Times
               </h3>
               <div class="space-y-6">
-                <div
-                  v-for="(hours, index) in form.opening_hours"
-                  :key="index"
-                  class="space-y-4 border p-4 rounded-lg dark:border-gray-600"
-                >
+                <div v-for="(hours, index) in form.opening_hours" :key="index"
+                  class="space-y-4 border p-4 rounded-lg dark:border-gray-600">
                   <div class="flex items-start space-x-4">
                     <div class="w-32">
                       <InputLabel :for="`day-${index}`" value="Day" />
-                      <select
-                        :id="`day-${index}`"
-                        v-model="hours.day"
-                        class="mt-1 block w-full dark:bg-gray-900 dark:text-gray-300"
-                        required
-                      >
+                      <select :id="`day-${index}`" v-model="hours.day"
+                        class="mt-1 block w-full dark:bg-gray-900 dark:text-gray-300" required>
                         <option v-for="day in weekDays" :key="day" :value="day">{{ day }}</option>
                       </select>
                     </div>
                     <div>
                       <InputLabel :for="`open-${index}`" value="Opening Time" />
-                      <TextInput
-                        :id="`open-${index}`"
-                        v-model="hours.open"
-                        type="time"
-                        class="mt-1 block w-full dark:bg-gray-900 dark:text-gray-300"
-                        required
-                      />
+                      <TextInput :id="`open-${index}`" v-model="hours.open" type="time"
+                        class="mt-1 block w-full dark:bg-gray-900 dark:text-gray-300" required />
                     </div>
                     <div>
                       <InputLabel :for="`close-${index}`" value="Closing Time" />
-                      <TextInput
-                        :id="`close-${index}`"
-                        v-model="hours.close"
-                        type="time"
-                        class="mt-1 block w-full dark:bg-gray-900 dark:text-gray-300"
-                        required
-                      />
+                      <TextInput :id="`close-${index}`" v-model="hours.close" type="time"
+                        class="mt-1 block w-full dark:bg-gray-900 dark:text-gray-300" required />
                     </div>
-                    <button
-                      type="button"
-                      @click="removeOpeningHours(index)"
-                      class="mt-7 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
-                    >
+                    <button type="button" @click="removeOpeningHours(index)"
+                      class="mt-7 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300">
                       <i class="fas fa-trash"></i>
                     </button>
                   </div>
@@ -210,64 +125,37 @@
                     <div>
                       <InputLabel :for="`breakfast-${index}`" value="Breakfast Time" />
                       <div class="flex gap-2">
-                        <TextInput
-                          :id="`breakfast-start-${index}`"
-                          v-model="hours.breakfast.start"
-                          type="time"
-                          class="mt-1 w-1/2 dark:bg-gray-900 dark:text-gray-300"
-                        />
-                        <TextInput
-                          :id="`breakfast-end-${index}`"
-                          v-model="hours.breakfast.end"
-                          type="time"
-                          class="mt-1 w-1/2 dark:bg-gray-900 dark:text-gray-300"
-                        />
+                        <TextInput :id="`breakfast-start-${index}`" v-model="hours.breakfast.start" type="time"
+                          class="mt-1 w-1/2 dark:bg-gray-900 dark:text-gray-300" />
+                        <TextInput :id="`breakfast-end-${index}`" v-model="hours.breakfast.end" type="time"
+                          class="mt-1 w-1/2 dark:bg-gray-900 dark:text-gray-300" />
                       </div>
                     </div>
 
                     <div>
                       <InputLabel :for="`lunch-${index}`" value="Lunch Time" />
                       <div class="flex gap-2">
-                        <TextInput
-                          :id="`lunch-start-${index}`"
-                          v-model="hours.lunch.start"
-                          type="time"
-                          class="mt-1 w-1/2 dark:bg-gray-900 dark:text-gray-300"
-                        />
-                        <TextInput
-                          :id="`lunch-end-${index}`"
-                          v-model="hours.lunch.end"
-                          type="time"
-                          class="mt-1 w-1/2 dark:bg-gray-900 dark:text-gray-300"
-                        />
+                        <TextInput :id="`lunch-start-${index}`" v-model="hours.lunch.start" type="time"
+                          class="mt-1 w-1/2 dark:bg-gray-900 dark:text-gray-300" />
+                        <TextInput :id="`lunch-end-${index}`" v-model="hours.lunch.end" type="time"
+                          class="mt-1 w-1/2 dark:bg-gray-900 dark:text-gray-300" />
                       </div>
                     </div>
 
                     <div>
                       <InputLabel :for="`dinner-${index}`" value="Dinner Time" />
                       <div class="flex gap-2">
-                        <TextInput
-                          :id="`dinner-start-${index}`"
-                          v-model="hours.dinner.start"
-                          type="time"
-                          class="mt-1 w-1/2 dark:bg-gray-900 dark:text-gray-300"
-                        />
-                        <TextInput
-                          :id="`dinner-end-${index}`"
-                          v-model="hours.dinner.end"
-                          type="time"
-                          class="mt-1 w-1/2 dark:bg-gray-900 dark:text-gray-300"
-                        />
+                        <TextInput :id="`dinner-start-${index}`" v-model="hours.dinner.start" type="time"
+                          class="mt-1 w-1/2 dark:bg-gray-900 dark:text-gray-300" />
+                        <TextInput :id="`dinner-end-${index}`" v-model="hours.dinner.end" type="time"
+                          class="mt-1 w-1/2 dark:bg-gray-900 dark:text-gray-300" />
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  @click="addOpeningHours"
-                  class="mt-2 inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 transition ease-in-out duration-150"
-                >
+                <button type="button" @click="addOpeningHours"
+                  class="mt-2 inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 transition ease-in-out duration-150">
                   <i class="fas fa-plus mr-2"></i> Add Day
                 </button>
                 <InputError :message="form.errors['opening_hours']" class="mt-2" />
@@ -276,42 +164,19 @@
             <div>
               <InputLabel for="image" value="Image" />
               <div class="mt-2 flex items-center">
-                <img
-                  v-if="imagePreview"
-                  :src="imagePreview"
-                  class="h-32 w-32 object-cover rounded-lg"
-                />
-                <img
-                  v-else-if="branch?.image_path"
-                  :src="`/storage/${branch.image_path}`"
-                  class="h-32 w-32 object-cover rounded-lg"
-                />
-                <div
-                  v-else
-                  class="h-32 w-32 rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center justify-center"
-                >
+                <img v-if="imagePreview" :src="imagePreview" class="h-32 w-32 object-cover rounded-lg" />
+                <img v-else-if="branch?.image_path" :src="`/storage/${branch.image_path}`"
+                  class="h-32 w-32 object-cover rounded-lg" />
+                <div v-else class="h-32 w-32 rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                   <i class="fas fa-camera text-gray-400 dark:text-gray-500 text-3xl"></i>
                 </div>
 
-                <input
-                  type="file"
-                  id="image"
-                  ref="imageInput"
-                  class="hidden"
-                  @change="handleImageChange"
-                  accept="image/*"
-                />
-                <SecondaryButton
-                  type="button"
-                  class="ml-4"
-                  @click="$refs.imageInput.click()"
-                >{{ imagePreview || branch?.image_path ? 'Change Image' : 'Select Image' }}</SecondaryButton>
-                <DangerButton
-                  v-if="imagePreview || branch?.image_path"
-                  type="button"
-                  class="ml-2"
-                  @click="removeImage"
-                >Remove</DangerButton>
+                <input type="file" id="image" ref="imageInput" class="hidden" @change="handleImageChange"
+                  accept="image/*" />
+                <SecondaryButton type="button" class="ml-4" @click="$refs.imageInput.click()">{{ imagePreview ||
+                  branch?.image_path ? 'Change Image' : 'Select Image' }}</SecondaryButton>
+                <DangerButton v-if="imagePreview || branch?.image_path" type="button" class="ml-2" @click="removeImage">
+                  Remove</DangerButton>
               </div>
               <InputError :message="form.errors.image" class="mt-2" />
             </div>
@@ -329,13 +194,11 @@
 
             <!-- Form Actions -->
             <div class="flex items-center justify-end space-x-3">
-              <Link
-                :href="route('admin.branches.index')"
-                class="inline-flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest hover:bg-gray-300 dark:hover:bg-gray-600 focus:bg-gray-300 dark:focus:bg-gray-600 active:bg-gray-300 dark:active:bg-gray-600"
-              >Cancel</Link>
-              <PrimaryButton
-                :disabled="form.processing"
-              >{{ branch ? 'Update Branch' : 'Create Branch' }}</PrimaryButton>
+              <Link :href="route('admin.branches.index')"
+                class="inline-flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest hover:bg-gray-300 dark:hover:bg-gray-600 focus:bg-gray-300 dark:focus:bg-gray-600 active:bg-gray-300 dark:active:bg-gray-600">
+              Cancel</Link>
+              <PrimaryButton :disabled="form.processing">{{ branch ? 'Update Branch' : 'Create Branch' }}
+              </PrimaryButton>
             </div>
           </form>
         </div>
@@ -445,7 +308,7 @@ const form = useForm({
   name: props.branch?.name ?? "",
   address: props.branch?.address ?? "",
   latitude: props.branch?.latitude ?? "",
-  longitude: props.branch?.longitude ?? "",
+  map_url: props.branch?.map_url ?? "",
   contact_number: props.branch?.contact_number ?? "",
   district_id: props.branch?.district_id ?? "",
   thana_id: props.branch?.thana_id ?? "",

@@ -24,9 +24,8 @@ class BranchRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'address' => 'required|string',
-            'latitude' => 'required|numeric|between:-90,90',
-            'longitude' => 'required|numeric|between:-180,180',
             'contact_number' => 'required|string|max:20',
+            'map_url' => 'nullable',
             'district_id' => 'required',
             'thana_id' => 'required',
             'local_id' => 'sometimes',

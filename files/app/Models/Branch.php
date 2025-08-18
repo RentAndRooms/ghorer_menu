@@ -24,7 +24,8 @@ class Branch extends Model
         'image',
         'district_id',
         'thana_id',
-        'local_id'
+        'local_id',
+        'map_url'
     ];
 
     protected $casts = [
