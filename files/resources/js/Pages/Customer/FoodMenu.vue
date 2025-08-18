@@ -80,54 +80,65 @@
                 <div class="grid grid-cols-1 gap-6">
                   <article v-for="food in filteredFoodsByCategory(category.id)" :key="food.id"
                     class="bg-white dark:bg-gray-800 shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 rounded-b-2xl">
-                    <div class="relative h-56">
+                    <!-- <div class="relative h-56">
                       <img v-if="food.image_path" :src="getImageUrl(food.image_path)" :alt="food.name"
                         class="w-full h-full object-cover" />
                       <div v-if="!food.is_available"
                         class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
                         <span class="text-white font-semibold text-lg">Currently Unavailable</span>
                       </div>
-                    </div>
+                    </div> -->
 
                     <div class="p-6">
                       <div class="flex justify-between items-start mb-4">
                         <div>
                           <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ food.name }}</h3>
-                          <p class="text-gray-600 dark:text-gray-400 line-clamp-2">{{ food.description }}</p>
+                          <!-- <p class="text-gray-600 dark:text-gray-400 line-clamp-2">{{ food.description }}</p> -->
                         </div>
-                        <div class="flex space-x-2 items-center">
-                          <i v-if="food.is_vegetarian" class="fas fa-leaf text-green-500 text-lg"
-                            title="Vegetarian"></i>
-                          <i v-if="food.is_spicy" class="fas fa-pepper-hot text-red-500 text-lg" title="Spicy"></i>
-                        </div>
-                      </div>
-
-                      <div class="space-y-2 text-sm text-gray-600 dark:text-gray-400 mb-4">
-                        <div class="flex items-center gap-2">
+                        <div>
                           <i class="fas fa-clock w-5 text-indigo-500"></i>
                           <span>Prep time: {{ food.preparation_time }} mins</span>
                         </div>
-                        <div v-if="food.allergens?.length" class="flex items-center gap-2">
-                          <i class="fas fa-exclamation-circle w-5 text-amber-500"></i>
-                          <span>Allergens: {{ food.allergens.join(', ') }}</span>
-                        </div>
+
+                        <!-- <div class="flex space-x-2 items-center">
+                          <i v-if="food.is_vegetarian" class="fas fa-leaf text-green-500 text-lg"
+                            title="Vegetarian"></i>
+                          <i v-if="food.is_spicy" class="fas fa-pepper-hot text-red-500 text-lg" title="Spicy"></i>
+                        </div> -->
                       </div>
+
+                      <div class="mb-4">
+                        <!-- Section Title -->
+                        <p
+                          class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2 border-b-2 border-blue-400 inline-block pb-1">
+                          Foods Included
+                        </p>
+
+                        <!-- List of Foods -->
+                        <ul class="space-y-2">
+                          <li v-for="(item, index) in food.foods" :key="index"
+                            class="bg-blue-400 text-white px-4 py-2 rounded-xl shadow-md hover:bg-blue-500 transition">
+                            {{ item.name }}
+                          </li>
+                        </ul>
+                      </div>
+
 
                       <div class="flex justify-between items-center border-t border-gray-200 dark:border-gray-700 pt-4">
                         <div class="flex items-center gap-3">
                           <span class="text-xl font-bold text-gray-900 dark:text-white">৳{{ food.base_price
-                          }}(Full)</span>
-                          <span v-if="food.half_price" class="text-xl font-bold text-gray-900 dark:text-white">৳{{
-                            food.half_price
-                          }}(Half)</span>
+                            }}</span>
                         </div>
-                        <button @click="openFoodModal(food)" :disabled="!food.is_available"
+                        <!-- <button @click="openFoodModal(food)" :disabled="!food.is_available"
                           class="inline-flex items-center px-5 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200"
                           :class="[
                             food.is_available
                               ? 'bg-indigo-600 text-white hover:bg-indigo-700'
                               : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                          ]">{{ food.is_available ? 'Add to Cart' : 'Not Available' }}</button>
+                          ]">{{ food.is_available ? 'Add to Cart' : 'Not Available' }}</button> -->
+                        <button @click="openFoodModal(food)"
+                          class="bg-indigo-600 px-5 py-2.5 rounded-lg text-white hover:bg-indigo-700">Add
+                          To Cart</button>
                       </div>
                     </div>
                   </article>
@@ -225,6 +236,7 @@ const props = defineProps({
   branch: { type: Object, required: true },
   categories: { type: Array, required: true },
   foods: { type: Object, required: true },
+  packages: { type: Object, required: true },
   auth: { type: Object, default: () => ({}) },
 });
 
@@ -391,17 +403,14 @@ const isRestaurantOpen = computed(() => {
 
 const filteredFoodsByCategory = (categoryId) => {
   let foods = getFoodsByCategory(categoryId);
-  if (filterVegetarian.value) {
-    foods = foods.filter(food => food.is_vegetarian);
-  }
-  if (filterSpicy.value) {
-    foods = foods.filter(food => food.is_spicy);
-  }
+  console.log(categoryId, 'category');
+  console.log(foods, 'foods');
   return foods;
 };
 
 const getFoodsByCategory = (categoryId) => {
-  return props.foods[categoryId] || [];
+  console.log(props.packages, 'all');
+  return props.packages.filter(pack => pack.category_id === categoryId);
 };
 
 const getImageUrl = (imagePath) => {

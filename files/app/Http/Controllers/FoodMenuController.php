@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Food;
 use Inertia\Inertia;
 use App\Models\Branch;
+use App\Models\Package;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+
 
 class FoodMenuController extends Controller
 {
@@ -20,17 +21,21 @@ class FoodMenuController extends Controller
             ->get()
             ->groupBy('category_id');
 
-        $categories = Category::whereHas('foods', function ($query) use ($branch) {
-            $query->where('branch_id', $branch->id)
-                ->where('is_available', true);
+            $packages = Package::with(['foods'])->where('branche_id', $branch->id)->get();
+
+
+
+        $categories = Category::whereHas('packages', function ($query) use ($branch) {
+            $query->where('branche_id', $branch->id);
         })->get();
 
-
+    
 
         return Inertia::render('Customer/FoodMenu', [
             'branch' => $branch,
             'categories' => $categories,
             'foods' => $foods,
+            'packages'=> $packages,
             'orderType' => $request->input('type', 'collection') // collection or delivery
         ]);
     }
