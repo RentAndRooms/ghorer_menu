@@ -29,7 +29,6 @@ class FoodMenuController extends Controller
             $query->where('branche_id', $branch->id);
         })->get();
 
-    
 
         return Inertia::render('Customer/FoodMenu', [
             'branch' => $branch,

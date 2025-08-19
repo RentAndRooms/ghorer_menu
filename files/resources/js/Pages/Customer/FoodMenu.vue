@@ -127,7 +127,7 @@
                       <div class="flex justify-between items-center border-t border-gray-200 dark:border-gray-700 pt-4">
                         <div class="flex items-center gap-3">
                           <span class="text-xl font-bold text-gray-900 dark:text-white">৳{{ food.base_price
-                            }}</span>
+                          }}</span>
                         </div>
                         <!-- <button @click="openFoodModal(food)" :disabled="!food.is_available"
                           class="inline-flex items-center px-5 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200"
@@ -410,7 +410,7 @@ const filteredFoodsByCategory = (categoryId) => {
 
 const getFoodsByCategory = (categoryId) => {
   console.log(props.packages, 'all');
-  return props.packages.filter(pack => pack.category_id === categoryId);
+  return props.packages.filter(pack => pack.category_id == categoryId);
 };
 
 const getImageUrl = (imagePath) => {
