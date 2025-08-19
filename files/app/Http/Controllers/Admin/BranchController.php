@@ -55,23 +55,23 @@ class BranchController extends Controller
         return response()->json($area);
     }
 
-public function store(BranchRequest $request)
-{
-    try {
-        $data = $request->validated();
+    public function store(BranchRequest $request)
+    {
+        try {
+            $data = $request->validated();
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('uploads', 'public');
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('uploads', 'public');
+            }
+
+            Branch::create($data);
+
+            return redirect()->route('admin.branches.index')
+                ->with('success', 'Branch created successfully.');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
-
-        Branch::create($data);
-
-        return redirect()->route('admin.branches.index')
-            ->with('success', 'Branch created successfully.');
-    } catch (\Exception $e) {
-        return back()->with('error', $e->getMessage());
     }
-}
 
 
     public function edit(Branch $branch)

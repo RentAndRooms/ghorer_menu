@@ -23,6 +23,10 @@ class FoodMenuController extends Controller
 
             $packages = Package::with(['foods'])->where('branche_id', $branch->id)->get();
 
+       $extrasFoods = Food::whereHas('category', function ($query) {
+            $query->where('name', 'like', 'Ext%');
+        })->get();
+
 
 
         $categories = Category::whereHas('packages', function ($query) use ($branch) {
@@ -35,6 +39,7 @@ class FoodMenuController extends Controller
             'categories' => $categories,
             'foods' => $foods,
             'packages'=> $packages,
+            'extrasFoods'=> $extrasFoods,
             'orderType' => $request->input('type', 'collection') // collection or delivery
         ]);
     }

@@ -40,7 +40,7 @@
             <div class="flex flex-col items-end">
               <label for="orderType" class="mb-1 text-sm text-gray-700 dark:text-gray-300 font-medium">Order
                 Type</label>
-              <select id="orderType" v-model="orderType" @change="handleOrderTypeChange"
+              <select id="orderType" v-model="orderType" @change="saveToLocalStorage"
                 class="w-48 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <option value="delivery">Delivery</option>
                 <option value="collection">Collection</option>
@@ -49,6 +49,7 @@
           </div>
         </div>
       </div>
+
       <div class="min-h-screen bg-gray-50 dark:bg-gray-900 w-full">
         <div class="container mx-auto px-4 py-8">
           <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
@@ -78,43 +79,24 @@
                 </div>
 
                 <div class="grid grid-cols-1 gap-6">
-                  <article v-for="food in filteredFoodsByCategory(category.id)" :key="food.id"
+                  <article v-for="food in getFoodsByCategory(category.id)" :key="food.id"
                     class="bg-white dark:bg-gray-800 shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 rounded-b-2xl">
-                    <!-- <div class="relative h-56">
-                      <img v-if="food.image_path" :src="getImageUrl(food.image_path)" :alt="food.name"
-                        class="w-full h-full object-cover" />
-                      <div v-if="!food.is_available"
-                        class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
-                        <span class="text-white font-semibold text-lg">Currently Unavailable</span>
-                      </div>
-                    </div> -->
-
                     <div class="p-6">
                       <div class="flex justify-between items-start mb-4">
                         <div>
                           <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ food.name }}</h3>
-                          <!-- <p class="text-gray-600 dark:text-gray-400 line-clamp-2">{{ food.description }}</p> -->
                         </div>
                         <div>
                           <i class="fas fa-clock w-5 text-indigo-500"></i>
                           <span>Prep time: {{ food.preparation_time }} mins</span>
                         </div>
-
-                        <!-- <div class="flex space-x-2 items-center">
-                          <i v-if="food.is_vegetarian" class="fas fa-leaf text-green-500 text-lg"
-                            title="Vegetarian"></i>
-                          <i v-if="food.is_spicy" class="fas fa-pepper-hot text-red-500 text-lg" title="Spicy"></i>
-                        </div> -->
                       </div>
 
                       <div class="mb-4">
-                        <!-- Section Title -->
                         <p
                           class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2 border-b-2 border-blue-400 inline-block pb-1">
                           Foods Included
                         </p>
-
-                        <!-- List of Foods -->
                         <ul class="space-y-2">
                           <li v-for="(item, index) in food.foods" :key="index"
                             class="bg-blue-400 text-white px-4 py-2 rounded-xl shadow-md hover:bg-blue-500 transition">
@@ -123,22 +105,11 @@
                         </ul>
                       </div>
 
-
                       <div class="flex justify-between items-center border-t border-gray-200 dark:border-gray-700 pt-4">
-                        <div class="flex items-center gap-3">
-                          <span class="text-xl font-bold text-gray-900 dark:text-white">৳{{ food.base_price
-                          }}</span>
-                        </div>
-                        <!-- <button @click="openFoodModal(food)" :disabled="!food.is_available"
-                          class="inline-flex items-center px-5 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200"
-                          :class="[
-                            food.is_available
-                              ? 'bg-indigo-600 text-white hover:bg-indigo-700'
-                              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                          ]">{{ food.is_available ? 'Add to Cart' : 'Not Available' }}</button> -->
+                        <span class="text-xl font-bold text-gray-900 dark:text-white">৳{{ food.base_price }}</span>
                         <button @click="openFoodModal(food)"
-                          class="bg-indigo-600 px-5 py-2.5 rounded-lg text-white hover:bg-indigo-700">Add
-                          To Cart</button>
+                          class="bg-indigo-600 px-5 py-2.5 rounded-lg text-white hover:bg-indigo-700">Add To
+                          Cart</button>
                       </div>
                     </div>
                   </article>
@@ -146,60 +117,77 @@
               </section>
             </main>
 
+            <!-- Cart Section -->
             <div class="lg:col-span-2">
-              <div v-for="(items, index) in selectedFood" :key="items.id"
+              <div v-for="(item, index) in selectedFood" :key="item.id"
                 :class="['bg-white dark:bg-gray-800 rounded-2xl shadow-lg top-24 p-6', index > 0 ? 'mt-2' : '']">
                 <div class="relative flex">
                   <div>
-                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">{{ items.name }}</h2>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">{{ items.description }}</p>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">{{ item.name }}</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">{{ item.description }}</p>
                   </div>
-                  <button @click="deleteItem(items.id)"
+                  <button @click="deleteItem(item.id)"
                     class="absolute top-0 right-0 text-2xl text-white bg-red-600 hover:bg-red-700 rounded-full w-7 h-7 flex items-center justify-center shadow-lg"
                     title="Remove">×</button>
                 </div>
+
                 <div class="mb-4">
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Portion</label>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Price</label>
                   <div class="flex gap-4">
                     <label class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
-                      <input type="radio" :name="`portion-${items.id}`" value="full" class="form-radio text-indigo-600"
-                        v-model="items.portion" @change="updateItemTotal(items.id)" checked />
-                      <span>Full (৳{{ items.base_price }})</span>
+                      <input type="radio" :name="`portion-${item.id}`" value="full" class="form-radio text-indigo-600"
+                        v-model="item.portion" @change="updateItemTotal(item.id)" checked />
+                      <span>(৳{{ item.base_price }})</span>
                     </label>
-                    <label v-if="items.half_price"
+                    <label v-if="item.half_price"
                       class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
-                      <input type="radio" :name="`portion-${items.id}`" value="half" class="form-radio text-indigo-600"
-                        v-model="items.portion" @change="updateItemTotal(items.id)" />
-                      <span>Half (৳{{ items.half_price }})</span>
+                      <input type="radio" :name="`portion-${item.id}`" value="half" class="form-radio text-indigo-600"
+                        v-model="item.portion" @change="updateItemTotal(item.id)" />
+                      <span>Half (৳{{ item.half_price }})</span>
                     </label>
                   </div>
                 </div>
-                <div class="mb-4" v-if="items.extra_options.length > 0">
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Extra Options</label>
-                  <div>
-                    <label v-for="extra in items.extra_options" :key="extra.id"
-                      class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
-                      <input type="checkbox" :value="extra.id" class="form-checkbox text-indigo-600"
-                        v-model="items.selected_extras" @change="updateItemTotal(items.id)" />
-                      <span>{{ extra.name }} (+৳{{ extra.price }})</span>
-                    </label>
+
+                <div class="flex max-w-md mx-auto">
+                  <div class="p-6 rounded-2xl bg-white dark:bg-gray-900">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Food Included</h3>
+                    <ul class="flex flex-wrap items-center gap-2">
+                      <li v-for="(cartFood, index) in item.foods" :key="index"
+                        class="px-3 py-1 text-sm rounded-full bg-rose-500/90 text-white">
+                        {{ cartFood.name }}
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="p-6 rounded-2xl bg-white dark:bg-gray-900">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Select Extras</h3>
+                    <ul>
+                      <li class="flex items-center gap-2" v-for="(extra, index) in extrasFoods" :key="index">
+                        <input type="checkbox" :id="'extra-' + index" :value="extra.id" v-model="item.selected_extras"
+                          @change="updateItemTotal(item.id)"
+                          class="w-4 h-4 text-green-500 rounded border-gray-300 focus:ring-green-500" />
+                        <label :for="'extra-' + index" class="text-gray-700 dark:text-gray-200">
+                          {{ extra.name }} (৳{{ extra.base_price }})
+                        </label>
+                      </li>
+                    </ul>
                   </div>
                 </div>
 
                 <div class="flex items-center gap-3 mb-4">
                   <span class="text-sm text-gray-600 dark:text-gray-300">Quantity</span>
                   <div class="flex items-center border rounded-lg px-2 py-1 w-fit">
-                    <button @click="decrement(items.id)" class="text-indigo-600 text-xl font-bold px-2">−</button>
-                    <span class="px-2 text-gray-900 dark:text-white">{{ items.qty }}</span>
-                    <button @click="increment(items.id)" class="text-indigo-600 text-xl font-bold px-2">+</button>
+                    <button @click="decrement(item.id)" class="text-indigo-600 text-xl font-bold px-2">−</button>
+                    <span class="px-2 text-gray-900 dark:text-white">{{ item.qty }}</span>
+                    <button @click="increment(item.id)" class="text-indigo-600 text-xl font-bold px-2">+</button>
                   </div>
                 </div>
 
                 <div class="flex justify-between items-center mb-4">
                   <span class="text-lg font-semibold text-gray-900 dark:text-white">Total:</span>
-                  <span class="text-lg font-bold text-gray-900 dark:text-white">৳ {{ items.total }}</span>
+                  <span class="text-lg font-bold text-gray-900 dark:text-white">৳ {{ item.total }}</span>
                 </div>
               </div>
+
               <div v-if="selectedFood.length > 0">
                 <div class="mt-4 p-4 bg-white dark:bg-gray-800 rounded-2xl shadow-md text-center">
                   <span class="text-lg font-semibold text-gray-700 dark:text-gray-300">Sub Total:</span>
@@ -227,22 +215,19 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
-import { Link } from "@inertiajs/vue3";
-import { router } from "@inertiajs/vue3";
+import { ref, computed, watch } from "vue";
+import { Link, router } from "@inertiajs/vue3";
 import CustomerLayout from "@/Layouts/CustomerLayout.vue";
 
 const props = defineProps({
   branch: { type: Object, required: true },
   categories: { type: Array, required: true },
-  foods: { type: Object, required: true },
-  packages: { type: Object, required: true },
+  packages: { type: Array, required: true },
+  extrasFoods: { type: Array, required: true },
   auth: { type: Object, default: () => ({}) },
 });
 
 const isProcessing = ref(false);
-const filterVegetarian = ref(false);
-const filterSpicy = ref(false);
 const activeCategory = ref(null);
 const orderType = ref("collection");
 const selectedFood = ref(
@@ -252,7 +237,7 @@ const selectedFood = ref(
     base_price: parseFloat(item.base_price) || 0,
     half_price: item.half_price ? parseFloat(item.half_price) : null,
     total: parseFloat(item.total) || 0,
-    portion: item.portion || 'full' // Ensure portion defaults to full
+    portion: item.portion || 'full'
   })) ?? []
 );
 
@@ -260,35 +245,27 @@ const selectedFood = ref(
 const notification = ref({
   show: false,
   message: '',
-  type: 'success'
 });
 
-// Show notification function
-const showNotification = (message, type = 'success', duration = 3000) => {
+const showNotification = (message, duration = 3000) => {
   notification.value.message = message;
-  notification.value.type = type;
   notification.value.show = true;
-
   setTimeout(() => {
     notification.value.show = false;
   }, duration);
 };
 
 const calculateItemTotal = (item) => {
-  // Ensure prices are numbers
   const basePrice = item.portion === 'half' && item.half_price
     ? parseFloat(item.half_price)
     : parseFloat(item.base_price);
 
-  // Calculate extras total
-  const extrasTotal = item.selected_extras?.reduce((sum, extraId) => {
-    const extra = item.extra_options.find(opt => opt.id === extraId);
-    return sum + (extra ? parseFloat(extra.price) : 0);
-  }, 0) || 0;
+  const extrasTotal = item.selected_extras.reduce((sum, extraId) => {
+    const extra = props.extrasFoods.find(opt => opt.id === extraId);
+    return sum + (extra ? parseFloat(extra.base_price) : 0);
+  }, 0);
 
-  // Calculate final total
-  const total = (basePrice + extrasTotal) * item.qty;
-  return isNaN(total) ? 0 : total;
+  return (basePrice + extrasTotal) * item.qty;
 };
 
 const updateItemTotal = (itemId) => {
@@ -299,29 +276,21 @@ const updateItemTotal = (itemId) => {
   }
 };
 
-const updateInstruction = (id, value) => {
-  const item = selectedFood.value.find(i => i.id === id);
-  if (item) {
-    item.instructions = value;
-    saveToLocalStorage();
-  }
-};
-
-const handleOrderTypeChange = () => {
-  saveToLocalStorage();
-};
-
 const subTotal = computed(() => {
-  const total = selectedFood.value.reduce((sum, item) => {
-    const itemTotal = parseFloat(item.total);
-    return sum + (isNaN(itemTotal) ? 0 : itemTotal);
-  }, 0);
-  return isNaN(total) ? 0 : total;
+  return selectedFood.value.reduce((sum, item) => sum + item.total, 0);
 });
 
 const deleteItem = (id) => {
   selectedFood.value = selectedFood.value.filter(item => item.id !== id);
   saveToLocalStorage();
+};
+
+const handleCheckout = () => {
+  if (!selectedFood.value.length) return;
+  isProcessing.value = true;
+  setTimeout(() => {
+    router.visit(route("customer.checkout", { branch: props.branch.id }));
+  }, 1000);
 };
 
 const saveToLocalStorage = () => {
@@ -333,22 +302,13 @@ const saveToLocalStorage = () => {
   }));
 };
 
-const handleCheckout = () => {
-  if (!selectedFood.value.length) return;
-  isProcessing.value = true;
-  setTimeout(() => {
-    router.visit(route("customer.checkout", { branch: props.branch.id }));
-  }, 1000);
-};
-
 const openFoodModal = (food) => {
-  if (!food.is_available) return;
-
-  // Ensure prices are numbers
   const basePrice = parseFloat(food.base_price) || 0;
   const halfPrice = food.half_price ? parseFloat(food.half_price) : null;
-
-  const existingItem = selectedFood.value.find(item => item.id === food.id && item.portion === 'full');
+  const existingItem = selectedFood.value.find(item =>
+    item.id === food.id && item.portion === 'full' &&
+    JSON.stringify(item.selected_extras) === JSON.stringify([])
+  );
 
   if (existingItem) {
     existingItem.qty += 1;
@@ -358,12 +318,11 @@ const openFoodModal = (food) => {
     const newItem = {
       ...food,
       qty: 1,
-      portion: 'full', // Explicitly set to full
+      portion: 'full',
       selected_extras: [],
-      instructions: '',
       base_price: basePrice,
       half_price: halfPrice,
-      total: basePrice // Set initial total to base_price (e.g., 100)
+      total: basePrice
     };
     selectedFood.value.push(newItem);
     showNotification(`${food.name} added to cart!`);
@@ -389,34 +348,8 @@ const decrement = (itemId) => {
   }
 };
 
-const isRestaurantOpen = computed(() => {
-  if (!props.branch.opening_hours) return false;
-  const now = new Date();
-  const currentDay = now.toLocaleDateString("en-US", { weekday: "long" });
-  const currentTime = now.toLocaleTimeString("en-US", { hour12: false });
-
-  const todayHours = props.branch.opening_hours.find(h => h.day === currentDay);
-  if (!todayHours) return false;
-
-  return currentTime >= todayHours.open && currentTime <= todayHours.close;
-});
-
-const filteredFoodsByCategory = (categoryId) => {
-  let foods = getFoodsByCategory(categoryId);
-  console.log(categoryId, 'category');
-  console.log(foods, 'foods');
-  return foods;
-};
-
 const getFoodsByCategory = (categoryId) => {
-  console.log(props.packages, 'all');
   return props.packages.filter(pack => pack.category_id == categoryId);
-};
-
-const getImageUrl = (imagePath) => {
-  if (!imagePath) return null;
-  const cleanPath = imagePath.startsWith("/") ? imagePath.slice(1) : imagePath;
-  return `${window.location.origin}/storage/${cleanPath}`;
 };
 
 const scrollToCategory = (categoryId) => {
@@ -431,7 +364,6 @@ watch(selectedFood, () => {
   saveToLocalStorage();
 }, { deep: true });
 </script>
-
 <style scoped>
 /* Notification Styles */
 .notification-enter-active,

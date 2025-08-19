@@ -40,7 +40,7 @@ class BranchRequest extends FormRequest
             'opening_hours.*.lunch.end' => 'nullable|date_format:H:i',
             'opening_hours.*.dinner.start' => 'nullable|date_format:H:i',
             'opening_hours.*.dinner.end' => 'nullable|date_format:H:i',
-            'delivery_radius' => 'required|integer|min:1|max:50',
+            // 'delivery_radius' => 'required|integer|min:1|max:50',
             'is_active' => 'required|boolean',
         ];
     }
