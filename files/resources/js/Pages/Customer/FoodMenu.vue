@@ -119,8 +119,8 @@
 
             <!-- Cart Section -->
             <div class="lg:col-span-2">
-              <div v-for="(item, index) in selectedFood" :key="item.id"
-                :class="['bg-white dark:bg-gray-800 rounded-2xl shadow-lg top-24 p-6', index > 0 ? 'mt-2' : '']">
+              <div v-for="(item, fIndex) in selectedFood" :key="item.id"
+                :class="['bg-white dark:bg-gray-800 rounded-2xl shadow-lg top-24 p-6', fIndex > 0 ? 'mt-2' : '']">
                 <div class="relative flex">
                   <div>
                     <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">{{ item.name }}</h2>
@@ -162,8 +162,8 @@
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Select Extras</h3>
                     <ul>
                       <li class="flex items-center gap-2" v-for="(extra, index) in extrasFoods" :key="index">
-                        <input type="checkbox" :id="'extra-' + index" :value="extra.id" v-model="item.selected_extras"
-                          @change="updateItemTotal(item.id)"
+                        <input type="checkbox" :id="'extra-' + [fIndex][index]" :value="extra.id"
+                          v-model="item.selected_extras" @change="updateItemTotal(item.id)"
                           class="w-4 h-4 text-green-500 rounded border-gray-300 focus:ring-green-500" />
                         <label :for="'extra-' + index" class="text-gray-700 dark:text-gray-200">
                           {{ extra.name }} (৳{{ extra.base_price }})
