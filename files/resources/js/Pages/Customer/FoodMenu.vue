@@ -18,6 +18,107 @@
       </div>
     </div>
 
+    <!-- Package Selection Modal -->
+    <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ selectedPackage?.name }}</h2>
+          <button @click="closeModal" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 text-2xl">
+            ×
+          </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6 space-y-6">
+          <!-- Package Description -->
+          <div v-if="selectedPackage?.description" class="text-gray-600 dark:text-gray-400">
+            {{ selectedPackage.description }}
+          </div>
+
+          <!-- Price Selection -->
+          <div class="space-y-3">
+            <div class="flex gap-4">
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="radio" name="modalPortion" value="full" v-model="modalData.portion"
+                  class="form-radio text-indigo-600 focus:ring-indigo-500" />
+                <span class="text-gray-700 dark:text-gray-300">Price (৳{{ selectedPackage?.base_price }})</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Foods Included -->
+          <div class="space-y-3">
+            <h3
+              class="text-lg font-semibold text-gray-900 dark:text-gray-100 border-b-2 border-blue-400 inline-block pb-1">
+              Foods Included
+            </h3>
+            <div class="flex flex-wrap gap-2">
+              <span v-for="(food, index) in selectedPackage?.foods" :key="index"
+                class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm">
+                {{ food.name }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Extra Foods Selection -->
+          <div class="space-y-3">
+            <h3
+              class="text-lg font-semibold text-gray-900 dark:text-gray-100 border-b-2 border-green-400 inline-block pb-1">
+              Select Extra Foods
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-60 overflow-y-auto">
+              <label v-for="extra in extrasFoods" :key="extra.id"
+                class="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                <input type="checkbox" :value="extra.id" v-model="modalData.selected_extras"
+                  class="w-4 h-4 text-green-500 rounded border-gray-300 focus:ring-green-500" />
+                <div class="flex-1">
+                  <span class="text-gray-700 dark:text-gray-200 font-medium">{{ extra.name }}</span>
+                  <span class="text-green-600 dark:text-green-400 ml-2">(৳{{ extra.base_price }})</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Quantity Selection -->
+          <div class="flex items-center gap-4">
+            <span class="text-lg font-medium text-gray-700 dark:text-gray-300">Quantity:</span>
+            <div class="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1">
+              <button @click="modalData.qty = Math.max(1, modalData.qty - 1)"
+                class="text-indigo-600 text-xl font-bold px-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                −
+              </button>
+              <span class="px-4 text-gray-900 dark:text-white font-semibold">{{ modalData.qty }}</span>
+              <button @click="modalData.qty++"
+                class="text-indigo-600 text-xl font-bold px-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                +
+              </button>
+            </div>
+          </div>
+
+          <!-- Total Price Display -->
+          <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+            <div class="flex justify-between items-center text-lg">
+              <span class="font-medium text-gray-700 dark:text-gray-300">Total Price:</span>
+              <span class="font-bold text-2xl text-indigo-600 dark:text-indigo-400">৳{{ modalTotal }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="flex gap-3 p-6 border-t border-gray-200 dark:border-gray-700">
+          <button @click="closeModal"
+            class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            Cancel
+          </button>
+          <button @click="addToCart"
+            class="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
       <!-- Branch Info Header -->
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
@@ -95,9 +196,9 @@
                       <div class="mb-4">
                         <p
                           class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2 border-b-2 border-blue-400 inline-block pb-1">
-                          Foods Included
+                          Foodsss Included
                         </p>
-                        <ul class="space-y-2">
+                        <ul class="flex gap-2">
                           <li v-for="(item, index) in food.foods" :key="index"
                             class="bg-blue-400 text-white px-4 py-2 rounded-xl shadow-md hover:bg-blue-500 transition">
                             {{ item.name }}
@@ -241,6 +342,15 @@ const selectedFood = ref(
   })) ?? []
 );
 
+// Modal state
+const showModal = ref(false);
+const selectedPackage = ref(null);
+const modalData = ref({
+  portion: 'full',
+  selected_extras: [],
+  qty: 1
+});
+
 // Notification state
 const notification = ref({
   show: false,
@@ -253,6 +363,80 @@ const showNotification = (message, duration = 3000) => {
   setTimeout(() => {
     notification.value.show = false;
   }, duration);
+};
+
+const modalTotal = computed(() => {
+  if (!selectedPackage.value) return 0;
+
+  const basePrice = modalData.value.portion === 'half' && selectedPackage.value.half_price
+    ? parseFloat(selectedPackage.value.half_price)
+    : parseFloat(selectedPackage.value.base_price);
+
+  const extrasTotal = modalData.value.selected_extras.reduce((sum, extraId) => {
+    const extra = props.extrasFoods.find(opt => opt.id === extraId);
+    return sum + (extra ? parseFloat(extra.base_price) : 0);
+  }, 0);
+
+  return (basePrice + extrasTotal) * modalData.value.qty;
+});
+
+const openFoodModal = (food) => {
+  selectedPackage.value = food;
+  modalData.value = {
+    portion: 'full',
+    selected_extras: [],
+    qty: 1
+  };
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+  selectedPackage.value = null;
+  modalData.value = {
+    portion: 'full',
+    selected_extras: [],
+    qty: 1
+  };
+};
+
+const addToCart = () => {
+  if (!selectedPackage.value) return;
+
+  const basePrice = parseFloat(selectedPackage.value.base_price) || 0;
+  const halfPrice = selectedPackage.value.half_price ? parseFloat(selectedPackage.value.half_price) : null;
+
+  // Create a unique identifier for the item including selected extras
+  const itemSignature = `${selectedPackage.value.id}-${modalData.value.portion}-${JSON.stringify(modalData.value.selected_extras.sort())}`;
+
+  // Check if exact same item (same package, portion, and extras) already exists
+  const existingItemIndex = selectedFood.value.findIndex(item => {
+    const existingSignature = `${item.id}-${item.portion}-${JSON.stringify((item.selected_extras || []).sort())}`;
+    return existingSignature === itemSignature;
+  });
+
+  if (existingItemIndex !== -1) {
+    // Update existing item quantity
+    selectedFood.value[existingItemIndex].qty += modalData.value.qty;
+    selectedFood.value[existingItemIndex].total = calculateItemTotal(selectedFood.value[existingItemIndex]);
+    showNotification(`${selectedPackage.value.name} quantity updated! (${selectedFood.value[existingItemIndex].qty})`);
+  } else {
+    // Add new item
+    const newItem = {
+      ...selectedPackage.value,
+      qty: modalData.value.qty,
+      portion: modalData.value.portion,
+      selected_extras: [...modalData.value.selected_extras],
+      base_price: basePrice,
+      half_price: halfPrice,
+      total: modalTotal.value
+    };
+    selectedFood.value.push(newItem);
+    showNotification(`${selectedPackage.value.name} added to cart!`);
+  }
+
+  saveToLocalStorage();
+  closeModal();
 };
 
 const calculateItemTotal = (item) => {
@@ -300,34 +484,6 @@ const saveToLocalStorage = () => {
     order_type: orderType.value,
     timestamp: new Date().toISOString()
   }));
-};
-
-const openFoodModal = (food) => {
-  const basePrice = parseFloat(food.base_price) || 0;
-  const halfPrice = food.half_price ? parseFloat(food.half_price) : null;
-  const existingItem = selectedFood.value.find(item =>
-    item.id === food.id && item.portion === 'full' &&
-    JSON.stringify(item.selected_extras) === JSON.stringify([])
-  );
-
-  if (existingItem) {
-    existingItem.qty += 1;
-    existingItem.total = calculateItemTotal(existingItem);
-    showNotification(`${food.name} quantity updated! (${existingItem.qty})`);
-  } else {
-    const newItem = {
-      ...food,
-      qty: 1,
-      portion: 'full',
-      selected_extras: [],
-      base_price: basePrice,
-      half_price: halfPrice,
-      total: basePrice
-    };
-    selectedFood.value.push(newItem);
-    showNotification(`${food.name} added to cart!`);
-  }
-  saveToLocalStorage();
 };
 
 const increment = (itemId) => {

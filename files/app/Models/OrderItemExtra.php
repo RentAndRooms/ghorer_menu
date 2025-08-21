@@ -12,7 +12,7 @@ class OrderItemExtra extends Model
 
     protected $fillable = [
         'order_item_id',
-        'extra_option_id',
+        'food_id',
         'quantity',
         'unit_price'
     ];
@@ -29,6 +29,6 @@ class OrderItemExtra extends Model
 
     public function extraOption()
     {
-        return $this->belongsTo(ExtraOption::class);
+        return $this->belongsTo(Food::class, 'food_id');
     }
 }

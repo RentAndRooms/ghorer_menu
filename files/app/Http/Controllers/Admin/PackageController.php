@@ -8,6 +8,7 @@ use App\Models\Package;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
 
 class PackageController extends Controller
@@ -19,7 +20,7 @@ class PackageController extends Controller
 
     public function create(){
         $branches = DB::table('branches')->select('id', 'name')->get();
-        $categories = DB::table('categories')->select('id', 'name')->get();
+        $categories = DB::table('categories')->select('id', 'name')->whereNull('deleted_at')->get();
         return Inertia::render('Admin/Packages/Create', compact(['categories', 'branches']));
     }
 

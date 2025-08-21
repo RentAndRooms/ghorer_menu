@@ -27,11 +27,15 @@ class CustomerOrderController extends Controller
         //     abort(403);
         // }
 
+        //package name
+        // extra
+
         $order->load([
             'branch',
-            'items.food',
+            'items.package',
             'items.extras.extraOption',
         ]);
+
 
         return Inertia::render('Customer/Orders/Show', [
             'order' => $order,

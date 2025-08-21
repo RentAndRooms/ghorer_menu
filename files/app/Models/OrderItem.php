@@ -12,7 +12,7 @@ class OrderItem extends Model
 
     protected $fillable = [
         'order_id',
-        'food_id',
+        'package_id',
         'quantity',
         'unit_price',
         'subtotal',
@@ -27,7 +27,7 @@ class OrderItem extends Model
 
     public function order()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Order::class, 'package_id');
     }
 
     public function food()
@@ -38,5 +38,10 @@ class OrderItem extends Model
     public function extras()
     {
         return $this->hasMany(OrderItemExtra::class);
+    }
+
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
     }
 }

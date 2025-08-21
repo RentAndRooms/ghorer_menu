@@ -9,6 +9,8 @@ const props = defineProps({
   statusTimeline: Array,
 });
 
+console.log(props.order);
+
 const deliveryEta = computed(() => {
   if (!props.order.estimated_delivery_time) return null;
   return new Date(props.order.estimated_delivery_time).toLocaleTimeString(
@@ -180,8 +182,7 @@ const getStatusIcon = (status) => {
                     <i class="fas fa-utensils text-gray-400"></i>
                   </div>
                   <div class="ml-4">
-                    <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ item.food ? item.food.name :
-                      'Unknown Item' }}</h4>
+                    <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ item.package.name }}</h4>
                     <div class="mt-1 flex items-center">
                       <span class="text-sm text-gray-500 dark:text-gray-400">Quantity: {{ item.quantity }}</span>
                       <span v-if="item.extras && item.extras.length"
@@ -196,7 +197,7 @@ const getStatusIcon = (status) => {
                     class="flex items-center text-sm text-gray-500 dark:text-gray-400">
                     <i class="fas fa-plus text-xs mr-2"></i>
                     {{ extra.extra_option?.name || 'Unknown Extra' }}
-                    <span class="ml-2 text-gray-400">(+${{ parseFloat(extra.extra_option?.price || 0).toFixed(2)
+                    <span class="ml-2 text-gray-400">(+${{ parseFloat(extra.extra_option?.base_price || 0).toFixed(2)
                     }})</span>
                   </div>
                 </div>

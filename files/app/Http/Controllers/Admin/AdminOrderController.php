@@ -72,14 +72,14 @@ class AdminOrderController extends Controller
     public function show(Order $order)
     {
         $order->load([
-            'user',
             'branch',
-            'items.food',
-            'items.extras.extraOption'
+            'items.package',
+            'items.extras.extraOption',
         ]);
 
-        return Inertia::render('Admin/Orders/Show', [
-            'order' => [
+        
+
+        $orderData = [
                 'id' => $order->id,
                 'user' => [
                     'name' => $order->user->name,
@@ -92,8 +92,8 @@ class AdminOrderController extends Controller
                 'items' => $order->items->map(fn($item) => [
                     'id' => $item->id,
                     'food' => [
-                        'name' => $item->food->name,
-                        'image' => $item->food->image_path ? Storage::url($item->food->image_path) : null
+                        'name' => $item->package->name,
+                        'image' => $item->package->image_path ? Storage::url($item->package->image_path) : null
                     ],
                     'quantity' => $item->quantity,
                     'unit_price' => $item->unit_price,
@@ -101,7 +101,7 @@ class AdminOrderController extends Controller
                     'special_instructions' => $item->special_instructions,
                     'extras' => $item->extras->map(fn($extra) => [
                         'name' => $extra->extraOption->name,
-                        'price' => $extra->extraOption->price
+                        'price' => $extra->extraOption->base_price
                     ])
                 ]),
                 'subtotal' => $order->subtotal,
@@ -115,7 +115,11 @@ class AdminOrderController extends Controller
                 'payment_method' => $order->payment_method,
                 'estimated_delivery_time' => $order->estimated_delivery_time,
                 'created_at' => $order->created_at
-            ]
+            ];
+
+
+        return Inertia::render('Admin/Orders/Show', [
+            'order' => $orderData
         ]);
     }
 

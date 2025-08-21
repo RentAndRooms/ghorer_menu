@@ -339,25 +339,25 @@ const loadCart = () => {
     console.log("Cart Data:", cartData);
 
     // Validate cart data structure
-    if (!cartData || !cartData.items || !Array.isArray(cartData.items)) {
-      console.log("Invalid cart data structure");
-      sessionStorage.removeItem("foodCart");
-      redirectToMenu();
-      return;
-    }
+    // if (!cartData || !cartData.items || !Array.isArray(cartData.items)) {
+    //   console.log("Invalid cart data structure");
+    //   sessionStorage.removeItem("foodCart");
+    //   redirectToMenu();
+    //   return;
+    // }
 
-    // Check if cart belongs to current branch
-    if (!props.branch?.id) {
-      console.log("Branch data is missing");
-      redirectToMenu();
-      return;
-    }
+    // // Check if cart belongs to current branch
+    // if (!props.branch?.id) {
+    //   console.log("Branch data is missing");
+    //   redirectToMenu();
+    //   return;
+    // }
 
-    if (Number(cartData.items[0].branch_id) !== Number(props.branch.id)) {
-      console.log("Cart belongs to a different branch");
-      redirectToMenu();
-      return;
-    }
+    // if (Number(cartData.items[0].branch_id) !== Number(props.branch.id)) {
+    //   console.log("Cart belongs to a different branch");
+    //   redirectToMenu();
+    //   return;
+    // }
 
     cart.value = cartData.items;
     console.log("Cart items loaded:", cart.value);

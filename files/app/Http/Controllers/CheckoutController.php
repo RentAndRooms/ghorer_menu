@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Branch;
 use App\Models\OrderItem;
 use App\Models\ExtraOption;
+use App\Models\Food;
 use App\Models\UserAddress;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -48,6 +49,7 @@ class CheckoutController extends Controller
 
     public function store(Request $request)
     {
+        // return $request->all();
         try {
             DB::beginTransaction();
 
@@ -65,6 +67,11 @@ class CheckoutController extends Controller
                 'paymentRef' => $request->paymentRef,
                 'estimated_delivery_time' => Carbon::now()->addMinutes($request->order_type === 'delivery' ? 45 : 20),
             ];
+
+
+            // insert into order table
+            // order_package table
+            // order_extra
 
             // dd($request->order_type === 'delivery');
             // Add delivery-specific fields only for delivery orders
@@ -94,11 +101,17 @@ class CheckoutController extends Controller
             // Debug the created order
             \Log::info('Created Order:', $order->toArray());
 
+            //      {"order_type":"collection","branch_id":27,"items":[
+            // {"food_id":2,"quantity":1,"special_instructions":null,
+            //     "order_extras":[24]
+            //     ,"unit_price":60,"subtotal":85},
+            // {"food_id":4,"quantity":1,"special_instructions":null,"order_extras":[26],"unit_price":120,"subtotal":200}],"payment_method":"nogod","paymentRef":"152","subtotal":285,"total_amount":285}
+
             // Process each item in the order
             foreach ($request->items as $item) {
                 $orderItem = OrderItem::create([
                     'order_id' => $order->id,
-                    'food_id' => $item['food_id'],
+                    'package_id' => $item['food_id'],
                     'quantity' => $item['quantity'],
                     'unit_price' => $item['unit_price'],
                     'subtotal' => $item['subtotal'],
@@ -106,12 +119,13 @@ class CheckoutController extends Controller
                 ]);
                 if($item['order_extras']) {
                     foreach ($item['order_extras'] as $extra) {
-                        $extraData = ExtraOption::find($extra);
+                        $extraData = Food::find($extra);
+                        logger($extraData);
                         OrderItemExtra::create([
                             'order_item_id' => $orderItem->id,
-                            'extra_option_id' => $extraData->id,
+                            'food_id' => $extraData->id,
                             'quantity' => $item['quantity'],
-                            'unit_price' => $extraData->price,
+                            'unit_price' => $extraData->base_price,
                         ]);
                     }
                 }
@@ -137,6 +151,7 @@ class CheckoutController extends Controller
             ])->with('success', 'Order placed successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
+            logger($e->getMessage());
             \Log::error('Order Creation Error:', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
