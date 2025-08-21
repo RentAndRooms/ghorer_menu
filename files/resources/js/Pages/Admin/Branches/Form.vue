@@ -13,7 +13,7 @@
               <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Basic Information</h3>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <InputLabel for="name" value="Restuarent Name" />
+                  <InputLabel for="name" value="Restaurant Name" />
                   <TextInput id="name" v-model="form.name" type="text"
                     class="mt-1 block w-full dark:bg-gray-900 dark:text-gray-300" required />
                   <InputError :message="form.errors.name" class="mt-2" />

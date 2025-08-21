@@ -1,11 +1,11 @@
 <template>
   <AdminLayout title="Branches">
     <div class="flex justify-between items-center">
-      <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Restuarent Management</h2>
+      <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Restaurant Management</h2>
       <Link v-if="props.auth.user.role == 'super_admin'" :href="route('admin.branches.create')"
         class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md shadow-sm transition dark:bg-indigo-500 dark:hover:bg-indigo-600">
       <i class="fas fa-plus mr-2"></i>
-      Add Restuarent
+      Add Restaurant
       </Link>
     </div>
     <div class="py-12">
@@ -22,7 +22,7 @@
                   <tr>
                     <th scope="col"
                       class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Restuarent Name</th>
+                      Restaurant Name</th>
                     <th scope="col"
                       class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Address</th>
@@ -46,7 +46,7 @@
                     </td>
                     <td class="px-6 py-4">
                       <div class="text-sm text-gray-900 dark:text-gray-100">{{ branch.address }}</div>
-                      <div class="text-xs text-gray-500 dark:text-gray-400">{{ branch.delivery_radius }}km radius</div>
+                      <!-- <div class="text-xs text-gray-500 dark:text-gray-400">{{ branch.delivery_radius }}km radius</div> -->
                     </td>
                     <td class="px-6 py-4">
                       <div
@@ -97,7 +97,7 @@
             <!-- Empty State -->
             <div v-else class="text-center py-12">
               <i class="fas fa-store text-gray-400 text-5xl mb-4"></i>
-              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">No Restuarent Found</h3>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">No Restaurant Found</h3>
               <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Get started by creating a new branch.</p>
               <div class="mt-6">
                 <Link :href="route('admin.branches.create')"
@@ -120,8 +120,8 @@
     <!-- Delete Confirmation Modal -->
     <Modal :show="showDeleteModal" @close="showDeleteModal = false">
       <div class="p-6">
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Delete Restuarent</h2>
-        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Are you sure you want to delete this restuarent? This
+        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Delete Restaurant</h2>
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Are you sure you want to delete this Restaurant? This
           action cannot be undone.</p>
         <div class="mt-6 flex justify-end space-x-3">
           <SecondaryButton @click="showDeleteModal = false">Cancel</SecondaryButton>

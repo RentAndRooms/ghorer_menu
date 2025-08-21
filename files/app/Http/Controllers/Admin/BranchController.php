@@ -67,7 +67,7 @@ class BranchController extends Controller
             Branch::create($data);
 
             return redirect()->route('admin.branches.index')
-                ->with('success', 'Branch created successfully.');
+                ->with('success', 'Restuarent created successfully.');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }

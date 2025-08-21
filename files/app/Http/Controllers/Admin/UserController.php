@@ -19,8 +19,8 @@ class UserController extends Controller
     }
     public function create()
     {
-        $restuarent = DB::table('branches')->get();
-        return Inertia::render('Admin/Users/Create', compact('restuarent'));
+        $Restaurant = DB::table('branches')->get();
+        return Inertia::render('Admin/Users/Create', compact('Restaurant'));
     }
 
     public function store(UserRequest $request)

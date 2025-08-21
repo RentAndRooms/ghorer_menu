@@ -1,10 +1,10 @@
 <template>
   <CustomerLayout>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-center mb-4">
+    <div class="flex justify-end mb-4" style="width: 85%;">
       <Link :href="route('home')"
         class="inline-flex items-center px-4 py-2 bg-[#F9733A] hover:bg-[#ea652f] text-white rounded-lg transition-colors duration-200">
       <i class="fas fa-home mr-2"></i>
-      Home
+      Back
       </Link>
     </div>
 
@@ -185,7 +185,9 @@
                     <div class="p-6">
                       <div class="flex justify-between items-start mb-4">
                         <div>
-                          <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ food.name }}</h3>
+                          <h3
+                            class="text-xl font-semibold text-gray-900 text-white bg-[#F9733A] rounded-lg px-2 dark:text-white">
+                            {{ food.name }}</h3>
                         </div>
                         <div>
                           <i class="fas fa-clock w-5 text-indigo-500"></i>
@@ -196,11 +198,11 @@
                       <div class="mb-4">
                         <p
                           class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2 border-b-2 border-blue-400 inline-block pb-1">
-                          Foodsss Included
+                          Foods Included
                         </p>
                         <ul class="flex gap-2">
                           <li v-for="(item, index) in food.foods" :key="index"
-                            class="bg-blue-400 text-white px-4 py-2 rounded-xl shadow-md hover:bg-blue-500 transition">
+                            class="bg-blue-400 text-white px-4 rounded-xl shadow-md hover:bg-blue-500 transition">
                             {{ item.name }}
                           </li>
                         </ul>
@@ -252,23 +254,22 @@
                 <div class="flex max-w-md mx-auto">
                   <div class="p-6 rounded-2xl bg-white dark:bg-gray-900">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Food Included</h3>
-                    <ul class="flex flex-wrap items-center gap-2">
+                    <ul class="flex flex-wrap items-center gap-1">
                       <li v-for="(cartFood, index) in item.foods" :key="index"
-                        class="px-3 py-1 text-sm rounded-full bg-rose-500/90 text-white">
+                        class="px-1 text-sm rounded-full bg-rose-500/90 text-white">
                         {{ cartFood.name }}
                       </li>
                     </ul>
                   </div>
                   <div class="p-6 rounded-2xl bg-white dark:bg-gray-900">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Select Extras</h3>
-                    <ul>
-                      <li class="flex items-center gap-2" v-for="(extra, index) in extrasFoods" :key="index">
-                        <input type="checkbox" :id="'extra-' + [fIndex][index]" :value="extra.id"
-                          v-model="item.selected_extras" @change="updateItemTotal(item.id)"
-                          class="w-4 h-4 text-green-500 rounded border-gray-300 focus:ring-green-500" />
-                        <label :for="'extra-' + index" class="text-gray-700 dark:text-gray-200">
-                          {{ extra.name }} (৳{{ extra.base_price }})
-                        </label>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Selected Extras</h3>
+                    <ul class="flex flex-wrap items-center gap-2">
+                      <li v-for="(extraId, index) in item.selected_extras" :key="index"
+                        class="px-3 py-1 text-sm rounded-full bg-green-500/90 text-white">
+                        {{ getExtraName(extraId) }} (৳{{ getExtraPrice(extraId) }})
+                      </li>
+                      <li v-if="!item.selected_extras.length" class="text-sm text-gray-500 dark:text-gray-400">
+                        No extras selected
                       </li>
                     </ul>
                   </div>
@@ -283,15 +284,35 @@
                   </div>
                 </div>
 
-                <div class="flex justify-between items-center mb-4">
-                  <span class="text-lg font-semibold text-gray-900 dark:text-white">Total:</span>
-                  <span class="text-lg font-bold text-gray-900 dark:text-white">৳ {{ item.total }}</span>
+                <div class="max-w-md mx-auto bg-white rounded-2xl">
+                  <h2 class="text-xl font-semibold mb-4 pb-2">Details</h2>
+
+                  <div class="grid grid-cols-3 border-b font-medium text-gray-700">
+                    <div>Item</div>
+                    <div class="text-center">Qty</div>
+                    <div class="text-right">Price</div>
+                  </div>
+                  <div class="grid grid-cols-3 font-medium text-gray-700">
+                    <div>Package</div>
+                    <div class="text-center">{{ item.qty }}</div>
+                    <div class="text-right">৳ {{ getItemPackagePrice(item) * item.qty }}</div>
+                  </div>
+                  <div v-for="extraId in item.selected_extras" :key="extraId"
+                    class="grid grid-cols-3 font-medium text-gray-700">
+                    <div>{{ getExtraName(extraId) }}</div>
+                    <div class="text-center">{{ item.qty }}</div>
+                    <div class="text-right">৳ {{ getExtraPrice(extraId) * item.qty }}</div>
+                  </div>
+                  <div class="grid grid-cols-3 border-t font-medium text-gray-700">
+                    <div class="col-span-2 font-semibold">Sub Total</div>
+                    <div class="text-right">৳ {{ item.total }}</div>
+                  </div>
                 </div>
               </div>
 
               <div v-if="selectedFood.length > 0">
                 <div class="mt-4 p-4 bg-white dark:bg-gray-800 rounded-2xl shadow-md text-center">
-                  <span class="text-lg font-semibold text-gray-700 dark:text-gray-300">Sub Total:</span>
+                  <span class="text-lg font-semibold text-gray-700 dark:text-gray-300">Total:</span>
                   <span class="text-xl font-bold text-indigo-600 dark:text-indigo-400 ml-2">৳ {{ subTotal }}</span>
                 </div>
 
@@ -357,11 +378,26 @@ const notification = ref({
   message: '',
 });
 
+// Store timeout ID to clear it when needed
+let notificationTimeout = null;
+
 const showNotification = (message, duration = 3000) => {
-  notification.value.message = message;
-  notification.value.show = true;
-  setTimeout(() => {
+  // Clear any existing timeout to prevent overlap
+  if (notificationTimeout) {
+    clearTimeout(notificationTimeout);
+  }
+
+  // Reset notification state
+  notification.value = {
+    show: true,
+    message: message
+  };
+
+  // Set new timeout to hide notification
+  notificationTimeout = setTimeout(() => {
     notification.value.show = false;
+    notification.value.message = '';
+    notificationTimeout = null;
   }, duration);
 };
 
@@ -435,8 +471,12 @@ const addToCart = () => {
     showNotification(`${selectedPackage.value.name} added to cart!`);
   }
 
+  // Log for debugging
+  console.log('Added/Updated item:', selectedFood.value);
+
+  // Save to localStorage and close modal with slight delay to ensure state updates
   saveToLocalStorage();
-  closeModal();
+  setTimeout(closeModal, 100);
 };
 
 const calculateItemTotal = (item) => {
@@ -450,6 +490,20 @@ const calculateItemTotal = (item) => {
   }, 0);
 
   return (basePrice + extrasTotal) * item.qty;
+};
+
+const getItemPackagePrice = (item) => {
+  return item.portion === 'half' && item.half_price ? item.half_price : item.base_price;
+};
+
+const getExtraName = (id) => {
+  const extra = props.extrasFoods.find(e => e.id === id);
+  return extra ? extra.name : 'Unknown';
+};
+
+const getExtraPrice = (id) => {
+  const extra = props.extrasFoods.find(e => e.id === id);
+  return extra ? parseFloat(extra.base_price) : 0;
 };
 
 const updateItemTotal = (itemId) => {
