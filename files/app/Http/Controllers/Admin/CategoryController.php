@@ -85,9 +85,9 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         try {
-            if ($category->foods()->exists()) {
-                return back()->with('error', 'Cannot delete category with associated foods.');
-            }
+            // if ($category->foods()->exists()) {
+            //     return back()->with('error', 'Cannot delete category with associated foods.');
+            // }
 
             if ($category->image_path) {
                 Storage::disk('public')->delete($category->image_path);
@@ -97,6 +97,7 @@ class CategoryController extends Controller
 
             return back()->with('success', 'Category deleted successfully.');
         } catch (\Exception $e) {
+            logger($e->getMessage());
             return back()->with('error', 'An error occurred while deleting the category.');
         }
     }

@@ -122,6 +122,10 @@ Route::middleware(['auth', 'not-customer'])->prefix('admin')->name('admin.')->gr
     Route::resource('locals', LocalAreaController::class);
     Route::resource('foods', FoodController::class);
 
+    // orders.update-payment-status
+
+    Route::patch('order/update-status/{order}', [AdminOrderController::class, 'updatePaymentStatus'])->name('orders.update-payment-status');
+
     Route::get('branch_food/{branch_id}', [FoodController::class, 'foodByBranch'])->name('food_by_branch');
 
     Route::get('package', [PackageController::class, 'index'])->name('package.index');

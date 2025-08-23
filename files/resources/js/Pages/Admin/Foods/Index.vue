@@ -64,7 +64,7 @@
                             {{ food.name }}
                           </div>
                           <div class="text-sm text-gray-500 dark:text-gray-400">
-                            {{ food.category.name }}
+                            {{ food.category?.name }}
                           </div>
                         </div>
                       </div>
@@ -74,9 +74,6 @@
                     <td class="px-6 py-4">
                       <div class="text-sm text-gray-900 dark:text-gray-100">
                         {{ food.branch.name }}
-                      </div>
-                      <div class="text-sm text-gray-500 dark:text-gray-400">
-                        {{ food.extra_options_count }} Extra Options
                       </div>
                       <div class="flex items-center space-x-2 mt-1">
                         <span v-if="food.is_vegetarian"
@@ -406,4 +403,3 @@ const getFoodBadges = (food) => {
   animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 </style>
-```

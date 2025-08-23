@@ -45,7 +45,7 @@
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                 <div>
-                  <InputLabel for="branch_id" value="Branch" required />
+                  <InputLabel for="branch_id" value="Restuarant" required />
                   <select id="branch_id" v-model="form.branch_id"
                     class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                     required>

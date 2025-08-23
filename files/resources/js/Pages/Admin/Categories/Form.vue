@@ -9,30 +9,21 @@
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+          <h1 class="text-xl font-semibold leading-tight text-center mt-4 text-gray-800 dark:text-gray-200">Create
+            Category
+          </h1>
           <form @submit.prevent="submit" class="p-6 space-y-6">
             <!-- Name Input -->
             <div>
               <InputLabel for="name" value="Name" />
-              <TextInput
-                id="name"
-                type="text"
-                class="mt-1 block w-full"
-                v-model="form.name"
-                required
-                autofocus
-              />
+              <TextInput id="name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
               <InputError :message="form.errors.name" class="mt-2" />
             </div>
 
             <!-- Description Input -->
             <div>
               <InputLabel for="description" value="Description" />
-              <TextArea
-                id="description"
-                class="mt-1 block w-full"
-                v-model="form.description"
-                rows="4"
-              />
+              <TextArea id="description" class="mt-1 block w-full" v-model="form.description" rows="4" />
               <InputError :message="form.errors.description" class="mt-2" />
             </div>
 
@@ -40,44 +31,20 @@
             <div>
               <InputLabel for="image" value="Image" />
               <div class="mt-2 flex items-center">
-                <img
-                  v-if="imagePreview"
-                  :src="imagePreview"
-                  class="h-32 w-32 object-cover rounded-lg"
-                />
-                <img
-                  v-else-if="category?.image_path"
-                  :src="`/storage/${category.image_path}`"
-                  class="h-32 w-32 object-cover rounded-lg"
-                />
-                <div
-                  v-else
-                  class="h-32 w-32 rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center justify-center"
-                >
+                <img v-if="imagePreview" :src="imagePreview" class="h-32 w-32 object-cover rounded-lg" />
+                <img v-else-if="category?.image_path" :src="`/storage/${category.image_path}`"
+                  class="h-32 w-32 object-cover rounded-lg" />
+                <div v-else class="h-32 w-32 rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                   <i class="fas fa-camera text-gray-400 dark:text-gray-500 text-3xl"></i>
                 </div>
 
-                <input
-                  type="file"
-                  id="image"
-                  ref="imageInput"
-                  class="hidden"
-                  @change="handleImageChange"
-                  accept="image/*"
-                />
-                <SecondaryButton
-                  type="button"
-                  class="ml-4"
-                  @click="$refs.imageInput.click()"
-                >
+                <input type="file" id="image" ref="imageInput" class="hidden" @change="handleImageChange"
+                  accept="image/*" />
+                <SecondaryButton type="button" class="ml-4" @click="$refs.imageInput.click()">
                   {{ imagePreview || category?.image_path ? 'Change Image' : 'Select Image' }}
                 </SecondaryButton>
-                <DangerButton
-                  v-if="imagePreview || category?.image_path"
-                  type="button"
-                  class="ml-2"
-                  @click="removeImage"
-                >
+                <DangerButton v-if="imagePreview || category?.image_path" type="button" class="ml-2"
+                  @click="removeImage">
                   Remove
                 </DangerButton>
               </div>
@@ -87,37 +54,23 @@
             <!-- Status Toggle -->
             <div class="flex items-center">
               <InputLabel for="is_active" value="Active Status" class="mr-4" />
-              <Toggle
-                v-model="form.is_active"
-                id="is_active"
-              />
+              <Toggle v-model="form.is_active" id="is_active" />
             </div>
 
             <!-- Sort Order -->
             <div>
               <InputLabel for="sort_order" value="Sort Order" />
-              <TextInput
-                id="sort_order"
-                type="number"
-                class="mt-1 block w-full"
-                v-model="form.sort_order"
-                min="0"
-              />
+              <TextInput id="sort_order" type="number" class="mt-1 block w-full" v-model="form.sort_order" min="0" />
               <InputError :message="form.errors.sort_order" class="mt-2" />
             </div>
 
             <!-- Form Buttons -->
             <div class="flex items-center justify-end space-x-3">
-              <Link
-                :href="route('admin.categories.index')"
-                class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
-              >
-                Cancel
+              <Link :href="route('admin.categories.index')"
+                class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200">
+              Cancel
               </Link>
-              <PrimaryButton
-                :class="{ 'opacity-25': form.processing }"
-                :disabled="form.processing"
-              >
+              <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                 {{ category ? 'Update Category' : 'Create Category' }}
               </PrimaryButton>
             </div>
