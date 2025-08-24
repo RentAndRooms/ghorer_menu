@@ -185,7 +185,7 @@
             <section class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
               <div class="flex items-center justify-between">
                 <div>
-                  <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Branch Status</h3>
+                  <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Restaurant Status</h3>
                   <p class="text-sm text-gray-500 dark:text-gray-400">Enable or disable this branch</p>
                 </div>
                 <Toggle v-model="form.is_active" class="ml-4" />
@@ -197,7 +197,7 @@
               <Link :href="route('admin.branches.index')"
                 class="inline-flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest hover:bg-gray-300 dark:hover:bg-gray-600 focus:bg-gray-300 dark:focus:bg-gray-600 active:bg-gray-300 dark:active:bg-gray-600">
               Cancel</Link>
-              <PrimaryButton :disabled="form.processing">{{ branch ? 'Update Branch' : 'Create Branch' }}
+              <PrimaryButton :disabled="form.processing">{{ branch ? 'Update Restuarant' : 'Create Restuarant' }}
               </PrimaryButton>
             </div>
           </form>

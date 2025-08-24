@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FoodRequest extends FormRequest
@@ -24,7 +25,12 @@ class FoodRequest extends FormRequest
         return [
             'branch_id' => 'required|exists:branches,id',
             'category_id' => 'required|exists:categories,id',
-            'name' => 'required|string|unique:food,name|max:255',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('food', 'name')->where('branch_id', $this->branch_id)->ignore($this->food)
+            ],
             'description' => 'nullable|string',
             'base_price' => 'required|numeric|min:0',
             'preparation_time' => 'required|integer|min:1',

@@ -183,6 +183,7 @@ const getStatusIcon = (status) => {
                   </div>
                   <div class="ml-4">
                     <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ item.package.name }}</h4>
+                    <p class="text-rose-900">{{ item.order_type }}</p>
                     <div class="mt-1 flex items-center">
                       <span class="text-sm text-gray-500 dark:text-gray-400">Quantity: {{ item.quantity }}</span>
                       <span v-if="item.extras && item.extras.length"
