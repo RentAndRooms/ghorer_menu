@@ -13,7 +13,7 @@
         <div class="p-6">
           <div class="flex flex-col md:flex-row md:items-center md:justify-between">
             <div>
-              <h1 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2">Order #{{ order.id }}</h1>
+              <h1 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2">Orders #{{ order.id }}</h1>
               <p class="text-sm text-gray-500 dark:text-gray-400">Placed {{ formatDate(order.created_at) }}</p>
             </div>
             <div class="mt-4 md:mt-0 space-y-2 md:space-y-0 md:space-x-2">
@@ -123,6 +123,7 @@
                           <h4 class="text-gray-900 dark:text-white">{{ item.food.name }}</h4>
                           <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Qty: {{ item.quantity }} × ${{
                             item.unit_price }}</p>
+                          <p>{{ item.order_type }}</p>
                         </div>
                         <p class="text-gray-900 dark:text-white font-medium">${{ item.subtotal }}</p>
                       </div>

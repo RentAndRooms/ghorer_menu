@@ -24,10 +24,10 @@
                                             Name</th>
                                         <th scope="col"
                                             class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                            Items</th>
+                                            Food Items</th>
                                         <th scope="col"
                                             class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider w-32">
-                                            Branch</th>
+                                            Restaurant</th>
                                         <th scope="col"
                                             class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider w-32">
                                             Category</th>
@@ -63,7 +63,7 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4">
-                                            <p>{{ pack.category.name }}</p>
+                                            <p>{{ pack.category?.name }}</p>
                                         </td>
                                         <td class="px-6 py-4">
                                             <p>{{ pack.base_price }}</p>

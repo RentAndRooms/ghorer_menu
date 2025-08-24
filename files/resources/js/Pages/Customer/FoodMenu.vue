@@ -96,6 +96,17 @@
             </div>
           </div>
 
+          <!-- Order Type Selection -->
+          <div class="flex flex-col">
+            <label for="modalOrderType" class="mb-1 text-sm text-gray-700 dark:text-gray-300 font-medium">Order
+              Type</label>
+            <select id="modalOrderType" v-model="modalData.orderType"
+              class="w-48 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="delivery">Delivery</option>
+              <option value="collection">Collection</option>
+            </select>
+          </div>
+
           <!-- Total Price Display -->
           <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
             <div class="flex justify-between items-center text-lg">
@@ -134,18 +145,6 @@
                 <i class="fas fa-phone mr-2"></i>
                 {{ branch.contact_number }}
               </span>
-            </div>
-          </div>
-
-          <div class="mt-4 lg:mt-0">
-            <div class="flex flex-col items-end">
-              <label for="orderType" class="mb-1 text-sm text-gray-700 dark:text-gray-300 font-medium">Order
-                Type</label>
-              <select id="orderType" v-model="orderType" @change="saveToLocalStorage"
-                class="w-48 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <option value="delivery">Delivery</option>
-                <option value="collection">Collection</option>
-              </select>
             </div>
           </div>
         </div>
@@ -251,6 +250,17 @@
                   </div>
                 </div>
 
+                <!-- Order Type Selection for Each Item -->
+                <div class="mb-4">
+                  <label :for="`orderType-${item.id}`"
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order Type</label>
+                  <select :id="`orderType-${item.id}`" v-model="item.orderType" @change="saveToLocalStorage"
+                    class="w-48 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="delivery">Delivery</option>
+                    <option value="collection">Collection</option>
+                  </select>
+                </div>
+
                 <div class="flex max-w-md mx-auto">
                   <div class="p-6 rounded-2xl bg-white dark:bg-gray-900">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Food Included</h3>
@@ -351,7 +361,6 @@ const props = defineProps({
 
 const isProcessing = ref(false);
 const activeCategory = ref(null);
-const orderType = ref("collection");
 const selectedFood = ref(
   JSON.parse(localStorage.getItem("selectedItem"))?.items?.map(item => ({
     ...item,
@@ -359,7 +368,8 @@ const selectedFood = ref(
     base_price: parseFloat(item.base_price) || 0,
     half_price: item.half_price ? parseFloat(item.half_price) : null,
     total: parseFloat(item.total) || 0,
-    portion: item.portion || 'full'
+    portion: item.portion || 'full',
+    orderType: item.orderType || 'collection'
   })) ?? []
 );
 
@@ -369,7 +379,8 @@ const selectedPackage = ref(null);
 const modalData = ref({
   portion: 'full',
   selected_extras: [],
-  qty: 1
+  qty: 1,
+  orderType: 'collection'
 });
 
 // Notification state
@@ -382,18 +393,15 @@ const notification = ref({
 let notificationTimeout = null;
 
 const showNotification = (message, duration = 3000) => {
-  // Clear any existing timeout to prevent overlap
   if (notificationTimeout) {
     clearTimeout(notificationTimeout);
   }
 
-  // Reset notification state
   notification.value = {
     show: true,
     message: message
   };
 
-  // Set new timeout to hide notification
   notificationTimeout = setTimeout(() => {
     notification.value.show = false;
     notification.value.message = '';
@@ -421,7 +429,8 @@ const openFoodModal = (food) => {
   modalData.value = {
     portion: 'full',
     selected_extras: [],
-    qty: 1
+    qty: 1,
+    orderType: 'collection'
   };
   showModal.value = true;
 };
@@ -432,7 +441,8 @@ const closeModal = () => {
   modalData.value = {
     portion: 'full',
     selected_extras: [],
-    qty: 1
+    qty: 1,
+    orderType: 'collection'
   };
 };
 
@@ -442,12 +452,12 @@ const addToCart = () => {
   const basePrice = parseFloat(selectedPackage.value.base_price) || 0;
   const halfPrice = selectedPackage.value.half_price ? parseFloat(selectedPackage.value.half_price) : null;
 
-  // Create a unique identifier for the item including selected extras
-  const itemSignature = `${selectedPackage.value.id}-${modalData.value.portion}-${JSON.stringify(modalData.value.selected_extras.sort())}`;
+  // Create a unique identifier for the item including selected extras and order type
+  const itemSignature = `${selectedPackage.value.id}-${modalData.value.portion}-${modalData.value.orderType}-${JSON.stringify(modalData.value.selected_extras.sort())}`;
 
-  // Check if exact same item (same package, portion, and extras) already exists
+  // Check if exact same item (same package, portion, order type, and extras) already exists
   const existingItemIndex = selectedFood.value.findIndex(item => {
-    const existingSignature = `${item.id}-${item.portion}-${JSON.stringify((item.selected_extras || []).sort())}`;
+    const existingSignature = `${item.id}-${item.portion}-${item.orderType}-${JSON.stringify((item.selected_extras || []).sort())}`;
     return existingSignature === itemSignature;
   });
 
@@ -462,6 +472,7 @@ const addToCart = () => {
       ...selectedPackage.value,
       qty: modalData.value.qty,
       portion: modalData.value.portion,
+      orderType: modalData.value.orderType,
       selected_extras: [...modalData.value.selected_extras],
       base_price: basePrice,
       half_price: halfPrice,
@@ -471,10 +482,7 @@ const addToCart = () => {
     showNotification(`${selectedPackage.value.name} added to cart!`);
   }
 
-  // Log for debugging
   console.log('Added/Updated item:', selectedFood.value);
-
-  // Save to localStorage and close modal with slight delay to ensure state updates
   saveToLocalStorage();
   setTimeout(closeModal, 100);
 };
@@ -535,7 +543,6 @@ const saveToLocalStorage = () => {
   localStorage.setItem("selectedItem", JSON.stringify({
     items: selectedFood.value,
     sub_total: subTotal.value,
-    order_type: orderType.value,
     timestamp: new Date().toISOString()
   }));
 };

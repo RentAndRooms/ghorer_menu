@@ -90,9 +90,9 @@ class BranchController extends Controller
         try {
             $branch->update($request->validated());
             return redirect()->route('admin.branches.index')
-                ->with('success', 'Branch updated successfully.');
+                ->with('success', 'Restuarant updated successfully.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Error updating branch. Please try again.');
+            return back()->with('error', 'Error updating Restuarant. Please try again.');
         }
     }
 
@@ -100,13 +100,13 @@ class BranchController extends Controller
     {
         try {
             if ($branch->foods()->exists()) {
-                return back()->with('error', 'Cannot delete branch with associated foods.');
+                return back()->with('error', 'Cannot delete Restuarant with associated foods.');
             }
 
             $branch->delete();
-            return back()->with('success', 'Branch deleted successfully.');
+            return back()->with('success', 'Restuarant deleted successfully.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Error deleting branch. Please try again.');
+            return back()->with('error', 'Error deleting Restuarant. Please try again.');
         }
     }
 }

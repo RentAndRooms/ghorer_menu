@@ -455,6 +455,7 @@ const completeOrder = () => {
       special_instructions: item.instructions || "",
       order_extras: item.selected_extras || [],
       unit_price: item.base_price,
+      orderType: item.orderType,
       subtotal: item.total,
     })),
     payment_method:

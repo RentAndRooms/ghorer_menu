@@ -77,8 +77,6 @@ class AdminOrderController extends Controller
             'items.extras.extraOption',
         ]);
 
-        
-
         $orderData = [
                 'id' => $order->id,
                 'user' => [
@@ -98,6 +96,7 @@ class AdminOrderController extends Controller
                     'quantity' => $item->quantity,
                     'unit_price' => $item->unit_price,
                     'subtotal' => $item->subtotal,
+                    'order_type'=>$item->order_type,
                     'special_instructions' => $item->special_instructions,
                     'extras' => $item->extras->map(fn($extra) => [
                         'name' => $extra->extraOption->name,
@@ -116,7 +115,6 @@ class AdminOrderController extends Controller
                 'estimated_delivery_time' => $order->estimated_delivery_time,
                 'created_at' => $order->created_at
             ];
-
 
         return Inertia::render('Admin/Orders/Show', [
             'order' => $orderData

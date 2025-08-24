@@ -49,7 +49,6 @@ class CheckoutController extends Controller
 
     public function store(Request $request)
     {
-        // return $request->all();
         try {
             DB::beginTransaction();
 
@@ -101,6 +100,7 @@ class CheckoutController extends Controller
             // Debug the created order
             \Log::info('Created Order:', $order->toArray());
 
+
             //      {"order_type":"collection","branch_id":27,"items":[
             // {"food_id":2,"quantity":1,"special_instructions":null,
             //     "order_extras":[24]
@@ -115,6 +115,7 @@ class CheckoutController extends Controller
                     'quantity' => $item['quantity'],
                     'unit_price' => $item['unit_price'],
                     'subtotal' => $item['subtotal'],
+                    'order_type' => $item['orderType'],
                     'special_instructions' => $item['special_instructions'] ?? null,
                 ]);
                 if($item['order_extras']) {

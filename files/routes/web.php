@@ -103,7 +103,6 @@ Route::get('/', function (Request $request) {
 })->name('home');
 
 
-
 Route::middleware(['auth', 'not-customer'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -135,16 +134,14 @@ Route::middleware(['auth', 'not-customer'])->prefix('admin')->name('admin.')->gr
 
     Route::get('package/edit/{package}', [PackageController::class, 'edit'])->name('package.edit');
     Route::put('package/update{package}', [PackageController::class, 'update'])->name('package.update');
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', function(){ return Inertia::render('Dashboard'); })->name('dashboard');
     Route::get('area/{city_id}', [BranchController::class, 'get_area'])->name('areas.selected');
     Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::get('orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
     Route::patch('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.update-status');
 });
 
-// SSLCOMMERZ Start
+// SSLCOMMERZ Start 01313050944 01403909989
 Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout'])->name('checkout');
 Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
 
