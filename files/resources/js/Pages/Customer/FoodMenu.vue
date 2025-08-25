@@ -152,193 +152,208 @@
 
       <div class="min-h-screen bg-gray-50 dark:bg-gray-900 w-full">
         <div class="container mx-auto px-4 py-8">
-          <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
-            <!-- Categories Sidebar -->
-            <aside class="lg:col-span-1">
-              <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg sticky top-24 p-6">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Menu Categories</h2>
-                <nav class="space-y-2">
-                  <button v-for="category in categories" :key="category.id" @click="scrollToCategory(category.id)"
-                    class="w-full text-left px-4 py-3 rounded-lg transition-all duration-200 flex justify-between items-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                    :class="{ 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300': activeCategory === category.id }">
-                    <span class="font-medium">{{ category.name }}</span>
-                    <span class="text-sm bg-indigo-50 dark:bg-indigo-900/20 px-2.5 py-1 rounded-full">{{
-                      getFoodsByCategory(category.id).length }}</span>
-                  </button>
-                </nav>
-              </div>
-            </aside>
-
-            <!-- Food Items Grid -->
-            <main class="lg:col-span-2 rounded-2xl bg-white dark:bg-gray-900 shadow-md">
-              <section v-for="category in categories" :key="category.id" :id="`category-${category.id}`"
-                class="scroll-mt-24 mb-8">
-                <div class="dark:bg-gray-800 text-center rounded-t-2xl">
-                  <h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ category.name }}</h2>
-                  <p class="text-gray-600 dark:text-gray-400 leading-relaxed">{{ category.description }}</p>
+          <div v-if="categories.length > 0">
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+              <!-- Categories Sidebar -->
+              <aside class="lg:col-span-1">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg sticky top-24 p-6">
+                  <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Menu Categories</h2>
+                  <nav class="space-y-2">
+                    <button v-for="category in categories" :key="category.id" @click="scrollToCategory(category.id)"
+                      class="w-full text-left px-4 py-3 rounded-lg transition-all duration-200 flex justify-between items-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      :class="{ 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300': activeCategory === category.id }">
+                      <span class="font-medium">{{ category.name }}</span>
+                      <span class="text-sm bg-indigo-50 dark:bg-indigo-900/20 px-2.5 py-1 rounded-full">{{
+                        getFoodsByCategory(category.id).length }}</span>
+                    </button>
+                  </nav>
                 </div>
-
-                <div class="grid grid-cols-1 gap-6">
-                  <article v-for="food in getFoodsByCategory(category.id)" :key="food.id"
-                    class="bg-white dark:bg-gray-800 shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 rounded-b-2xl">
-                    <div class="p-6">
-                      <div class="flex justify-between items-start mb-4">
-                        <div>
-                          <h3
-                            class="text-xl font-semibold text-gray-900 text-white bg-[#F9733A] rounded-lg px-2 dark:text-white">
-                            {{ food.name }}</h3>
-                        </div>
-                        <div>
-                          <i class="fas fa-clock w-5 text-indigo-500"></i>
-                          <span>Prep time: {{ food.preparation_time }} mins</span>
-                        </div>
-                      </div>
-
-                      <div class="mb-4">
-                        <p
-                          class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2 border-b-2 border-blue-400 inline-block pb-1">
-                          Foods Included
-                        </p>
-                        <ul class="flex gap-2">
-                          <li v-for="(item, index) in food.foods" :key="index"
-                            class="bg-blue-400 text-white px-4 rounded-xl shadow-md hover:bg-blue-500 transition">
-                            {{ item.name }}
-                          </li>
-                        </ul>
-                      </div>
-
-                      <div class="flex justify-between items-center border-t border-gray-200 dark:border-gray-700 pt-4">
-                        <span class="text-xl font-bold text-gray-900 dark:text-white">৳{{ food.base_price }}</span>
-                        <button @click="openFoodModal(food)"
-                          class="bg-indigo-600 px-5 py-2.5 rounded-lg text-white hover:bg-indigo-700">Add To
-                          Cart</button>
-                      </div>
+              </aside>
+              <!-- Food Items Grid -->
+              <main class="lg:col-span-2 rounded-2xl bg-white dark:bg-gray-900 shadow-md">
+                <div>
+                  <section v-for="category in categories" :key="category.id" :id="`category-${category.id}`"
+                    class="scroll-mt-24 mb-8">
+                    <div class="dark:bg-gray-800 text-center rounded-t-2xl">
+                      <h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ category.name }}</h2>
+                      <p class="text-gray-600 dark:text-gray-400 leading-relaxed">{{ category.description }}</p>
                     </div>
-                  </article>
+
+                    <div class="grid grid-cols-1 gap-6">
+                      <article v-for="food in getFoodsByCategory(category.id)" :key="food.id"
+                        class="bg-white dark:bg-gray-800 shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 rounded-b-2xl">
+                        <div class="p-6">
+                          <div class="flex justify-between items-start mb-4">
+                            <div>
+                              <h3
+                                class="text-xl font-semibold text-gray-900 text-white bg-[#F9733A] rounded-lg px-2 dark:text-white">
+                                {{ food.name }}</h3>
+                            </div>
+                            <div>
+                              <i class="fas fa-clock w-5 text-indigo-500"></i>
+                              <span>Prep time: {{ food.preparation_time }} mins</span>
+                            </div>
+                          </div>
+
+                          <div class="mb-4">
+                            <p
+                              class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2 border-b-2 border-blue-400 inline-block pb-1">
+                              Foods Included
+                            </p>
+                            <ul class="flex gap-2">
+                              <li v-for="(item, index) in food.foods" :key="index"
+                                class="bg-blue-400 text-white px-4 rounded-xl shadow-md hover:bg-blue-500 transition">
+                                {{ item.name }}
+                              </li>
+                            </ul>
+                          </div>
+
+                          <div
+                            class="flex justify-between items-center border-t border-gray-200 dark:border-gray-700 pt-4">
+                            <span class="text-xl font-bold text-gray-900 dark:text-white">৳{{ food.base_price }}</span>
+                            <button @click="openFoodModal(food)"
+                              class="bg-indigo-600 px-5 py-2.5 rounded-lg text-white hover:bg-indigo-700">Add To
+                              Cart</button>
+                          </div>
+                        </div>
+                      </article>
+                    </div>
+                  </section>
                 </div>
-              </section>
-            </main>
+              </main>
 
-            <!-- Cart Section -->
-            <div class="lg:col-span-2">
-              <div v-for="(item, fIndex) in selectedFood" :key="item.id"
-                :class="['bg-white dark:bg-gray-800 rounded-2xl shadow-lg top-24 p-6', fIndex > 0 ? 'mt-2' : '']">
-                <div class="relative flex">
-                  <div>
-                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">{{ item.name }}</h2>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">{{ item.description }}</p>
+              <!-- Cart Section -->
+              <div class="lg:col-span-2">
+                <div v-for="(item, fIndex) in selectedFood" :key="item.id"
+                  :class="['bg-white dark:bg-gray-800 rounded-2xl shadow-lg top-24 p-6', fIndex > 0 ? 'mt-2' : '']">
+                  <div class="relative flex">
+                    <div>
+                      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">{{ item.name }}</h2>
+                      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">{{ item.description }}</p>
+                    </div>
+                    <button @click="deleteItem(item.id)"
+                      class="absolute top-0 right-0 text-2xl text-white bg-red-600 hover:bg-red-700 rounded-full w-7 h-7 flex items-center justify-center shadow-lg"
+                      title="Remove">×</button>
                   </div>
-                  <button @click="deleteItem(item.id)"
-                    class="absolute top-0 right-0 text-2xl text-white bg-red-600 hover:bg-red-700 rounded-full w-7 h-7 flex items-center justify-center shadow-lg"
-                    title="Remove">×</button>
+
+                  <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Price</label>
+                    <div class="flex gap-4">
+                      <label class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                        <input type="radio" :name="`portion-${item.id}`" value="full" class="form-radio text-indigo-600"
+                          v-model="item.portion" @change="updateItemTotal(item.id)" checked />
+                        <span>(৳{{ item.base_price }})</span>
+                      </label>
+                      <label v-if="item.half_price"
+                        class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                        <input type="radio" :name="`portion-${item.id}`" value="half" class="form-radio text-indigo-600"
+                          v-model="item.portion" @change="updateItemTotal(item.id)" />
+                        <span>Half (৳{{ item.half_price }})</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Order Type Selection for Each Item -->
+                  <div class="mb-4">
+                    <label :for="`orderType-${item.id}`"
+                      class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order Type</label>
+                    <select :id="`orderType-${item.id}`" v-model="item.orderType" @change="saveToLocalStorage"
+                      class="w-48 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                      <option value="delivery">Delivery</option>
+                      <option value="collection">Collection</option>
+                    </select>
+                  </div>
+
+                  <div class="flex max-w-md mx-auto">
+                    <div class="p-6 rounded-2xl bg-white dark:bg-gray-900">
+                      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Food Included</h3>
+                      <ul class="flex flex-wrap items-center gap-1">
+                        <li v-for="(cartFood, index) in item.foods" :key="index"
+                          class="px-1 text-sm rounded-full bg-rose-500/90 text-white">
+                          {{ cartFood.name }}
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-white dark:bg-gray-900">
+                      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Selected Extras</h3>
+                      <ul class="flex flex-wrap items-center gap-2">
+                        <li v-for="(extraId, index) in item.selected_extras" :key="index"
+                          class="px-3 py-1 text-sm rounded-full bg-green-500/90 text-white">
+                          {{ getExtraName(extraId) }} (৳{{ getExtraPrice(extraId) }})
+                        </li>
+                        <li v-if="!item.selected_extras.length" class="text-sm text-gray-500 dark:text-gray-400">
+                          No extras selected
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-3 mb-4">
+                    <span class="text-sm text-gray-600 dark:text-gray-300">Quantity</span>
+                    <div class="flex items-center border rounded-lg px-2 py-1 w-fit">
+                      <button @click="decrement(item.id)" class="text-indigo-600 text-xl font-bold px-2">−</button>
+                      <span class="px-2 text-gray-900 dark:text-white">{{ item.qty }}</span>
+                      <button @click="increment(item.id)" class="text-indigo-600 text-xl font-bold px-2">+</button>
+                    </div>
+                  </div>
+
+                  <div class="max-w-md mx-auto bg-white rounded-2xl">
+                    <h2 class="text-xl font-semibold mb-4 pb-2">Details</h2>
+
+                    <div class="grid grid-cols-3 border-b font-medium text-gray-700">
+                      <div>Item</div>
+                      <div class="text-center">Qty</div>
+                      <div class="text-right">Price</div>
+                    </div>
+                    <div class="grid grid-cols-3 font-medium text-gray-700">
+                      <div>Package</div>
+                      <div class="text-center">{{ item.qty }}</div>
+                      <div class="text-right">৳ {{ getItemPackagePrice(item) * item.qty }}</div>
+                    </div>
+                    <div v-for="extraId in item.selected_extras" :key="extraId"
+                      class="grid grid-cols-3 font-medium text-gray-700">
+                      <div>{{ getExtraName(extraId) }}</div>
+                      <div class="text-center">{{ item.qty }}</div>
+                      <div class="text-right">৳ {{ getExtraPrice(extraId) * item.qty }}</div>
+                    </div>
+                    <div class="grid grid-cols-3 border-t font-medium text-gray-700">
+                      <div class="col-span-2 font-semibold">Sub Total</div>
+                      <div class="text-right">৳ {{ item.total }}</div>
+                    </div>
+                  </div>
                 </div>
 
-                <div class="mb-4">
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Price</label>
-                  <div class="flex gap-4">
-                    <label class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
-                      <input type="radio" :name="`portion-${item.id}`" value="full" class="form-radio text-indigo-600"
-                        v-model="item.portion" @change="updateItemTotal(item.id)" checked />
-                      <span>(৳{{ item.base_price }})</span>
-                    </label>
-                    <label v-if="item.half_price"
-                      class="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
-                      <input type="radio" :name="`portion-${item.id}`" value="half" class="form-radio text-indigo-600"
-                        v-model="item.portion" @change="updateItemTotal(item.id)" />
-                      <span>Half (৳{{ item.half_price }})</span>
-                    </label>
+                <div v-if="selectedFood.length > 0">
+                  <div class="mt-4 p-4 bg-white dark:bg-gray-800 rounded-2xl shadow-md text-center">
+                    <span class="text-lg font-semibold text-gray-700 dark:text-gray-300">Total:</span>
+                    <span class="text-xl font-bold text-indigo-600 dark:text-indigo-400 ml-2">৳ {{ subTotal }}</span>
                   </div>
+
+                  <button @click="handleCheckout" :disabled="isProcessing"
+                    class="w-full text-lg bg-indigo-600 text-white hover:bg-indigo-700 text-center px-5 py-2.5 rounded-lg transition-colors duration-200 flex justify-center items-center mt-2">
+                    <template v-if="isProcessing">
+                      <svg class="animate-spin h-5 w-5 text-white text-center" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                    </template>
+                    <template v-else>Proceed To Checkout</template>
+                  </button>
                 </div>
-
-                <!-- Order Type Selection for Each Item -->
-                <div class="mb-4">
-                  <label :for="`orderType-${item.id}`"
-                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order Type</label>
-                  <select :id="`orderType-${item.id}`" v-model="item.orderType" @change="saveToLocalStorage"
-                    class="w-48 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option value="delivery">Delivery</option>
-                    <option value="collection">Collection</option>
-                  </select>
-                </div>
-
-                <div class="flex max-w-md mx-auto">
-                  <div class="p-6 rounded-2xl bg-white dark:bg-gray-900">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Food Included</h3>
-                    <ul class="flex flex-wrap items-center gap-1">
-                      <li v-for="(cartFood, index) in item.foods" :key="index"
-                        class="px-1 text-sm rounded-full bg-rose-500/90 text-white">
-                        {{ cartFood.name }}
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="p-6 rounded-2xl bg-white dark:bg-gray-900">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Selected Extras</h3>
-                    <ul class="flex flex-wrap items-center gap-2">
-                      <li v-for="(extraId, index) in item.selected_extras" :key="index"
-                        class="px-3 py-1 text-sm rounded-full bg-green-500/90 text-white">
-                        {{ getExtraName(extraId) }} (৳{{ getExtraPrice(extraId) }})
-                      </li>
-                      <li v-if="!item.selected_extras.length" class="text-sm text-gray-500 dark:text-gray-400">
-                        No extras selected
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-                <div class="flex items-center gap-3 mb-4">
-                  <span class="text-sm text-gray-600 dark:text-gray-300">Quantity</span>
-                  <div class="flex items-center border rounded-lg px-2 py-1 w-fit">
-                    <button @click="decrement(item.id)" class="text-indigo-600 text-xl font-bold px-2">−</button>
-                    <span class="px-2 text-gray-900 dark:text-white">{{ item.qty }}</span>
-                    <button @click="increment(item.id)" class="text-indigo-600 text-xl font-bold px-2">+</button>
-                  </div>
-                </div>
-
-                <div class="max-w-md mx-auto bg-white rounded-2xl">
-                  <h2 class="text-xl font-semibold mb-4 pb-2">Details</h2>
-
-                  <div class="grid grid-cols-3 border-b font-medium text-gray-700">
-                    <div>Item</div>
-                    <div class="text-center">Qty</div>
-                    <div class="text-right">Price</div>
-                  </div>
-                  <div class="grid grid-cols-3 font-medium text-gray-700">
-                    <div>Package</div>
-                    <div class="text-center">{{ item.qty }}</div>
-                    <div class="text-right">৳ {{ getItemPackagePrice(item) * item.qty }}</div>
-                  </div>
-                  <div v-for="extraId in item.selected_extras" :key="extraId"
-                    class="grid grid-cols-3 font-medium text-gray-700">
-                    <div>{{ getExtraName(extraId) }}</div>
-                    <div class="text-center">{{ item.qty }}</div>
-                    <div class="text-right">৳ {{ getExtraPrice(extraId) * item.qty }}</div>
-                  </div>
-                  <div class="grid grid-cols-3 border-t font-medium text-gray-700">
-                    <div class="col-span-2 font-semibold">Sub Total</div>
-                    <div class="text-right">৳ {{ item.total }}</div>
-                  </div>
-                </div>
-              </div>
-
-              <div v-if="selectedFood.length > 0">
-                <div class="mt-4 p-4 bg-white dark:bg-gray-800 rounded-2xl shadow-md text-center">
-                  <span class="text-lg font-semibold text-gray-700 dark:text-gray-300">Total:</span>
-                  <span class="text-xl font-bold text-indigo-600 dark:text-indigo-400 ml-2">৳ {{ subTotal }}</span>
-                </div>
-
-                <button @click="handleCheckout" :disabled="isProcessing"
-                  class="w-full text-lg bg-indigo-600 text-white hover:bg-indigo-700 text-center px-5 py-2.5 rounded-lg transition-colors duration-200 flex justify-center items-center mt-2">
-                  <template v-if="isProcessing">
-                    <svg class="animate-spin h-5 w-5 text-white text-center" xmlns="http://www.w3.org/2000/svg"
-                      fill="none" viewBox="0 0 24 24">
-                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                    </svg>
-                  </template>
-                  <template v-else>Proceed To Checkout</template>
-                </button>
               </div>
             </div>
+          </div>
+          <div v-else
+            class="flex flex-col items-center justify-center min-h-[60vh] text-center bg-gradient-to-br from-orange-100 via-orange-200 to-orange-50 p-10 rounded-3xl shadow-2xl">
+            <img src="https://ghorermenu.com/coming_soon.jpg" alt="Coming Soon"
+              class="w-64 h-64 object-cover mb-6 rounded-xl shadow-lg border-4 border-orange-300">
+            <p class="text-2xl font-bold text-orange-600 mb-2">No packages found</p>
+            <p class="text-gray-600 dark:text-gray-500">Please check back later or explore other Restaurant!</p>
+            <Link href="/"
+              class="mt-6 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-full shadow-lg transition-all">
+            Go Home
+            </Link>
           </div>
         </div>
       </div>

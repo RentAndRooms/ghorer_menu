@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreLocalRequest;
+use Exception;
+use Inertia\Inertia;
 use App\Models\Local;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Inertia\Inertia;
+use App\Http\Requests\StoreLocalRequest;
 
 class LocalAreaController extends Controller
 {
@@ -64,7 +65,15 @@ class LocalAreaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $local = DB::table('locals')->where('id', $id)->first();
+        $cities = DB::table('cities')->select('id', 'name')->orderBy('id', 'desc')->get();
+        $areas = DB::table('areas')->select('id', 'name', 'district_id')->get();
+
+        if (!$local) {
+            return redirect()->route('admin.locals.index')->with('error', 'Local area not found');
+        }
+
+        return Inertia::render('Admin/Locals/Edit', compact('local', 'cities', 'areas'));
     }
 
     /**
@@ -72,7 +81,27 @@ class LocalAreaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'city_id' => 'required|integer|exists:cities,id',
+                'area_id' => 'required|integer|exists:areas,id',
+            ]);
+
+            DB::beginTransaction();
+            DB::table('locals')->where('id', $id)->update($validated);
+            DB::table('r_search')->where('own_id', $id)->update([
+                'name' => $validated['name'],
+                'district_id' => $validated['city_id'],
+                'thana_id' => $validated['area_id'],
+            ]);
+            DB::commit();
+            return redirect()->route('admin.locals.index')->with('success', 'Local area updated successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            logger($e->getMessage());
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -80,6 +109,16 @@ class LocalAreaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try{
+            DB::beginTransaction();
+            DB::table('locals')->where('id', $id)->delete();
+            DB::table('r_search')->where('own_id', $id)->delete();
+            DB::commit();
+            return redirect()->back()->with('success', 'Local Area deleted successfully');
+        }catch(Exception $e){
+            DB::rollback();
+            Logger($e->getMessage());
+            return back();
+        }
     }
 }

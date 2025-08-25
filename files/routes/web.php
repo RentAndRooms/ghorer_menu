@@ -114,6 +114,10 @@ Route::middleware(['auth', 'not-customer'])->prefix('admin')->name('admin.')->gr
     Route::get('/user/index', [UserController::class, 'index'])->name('user.index');
     Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
     Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
+    Route::get('/user/{user}', [UserController::class, 'show'])->name('user.show');
+    Route::get('/user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update');
+    Route::delete('user/{user}', [UserController::class, 'delete'])->name('user.destroy');
     Route::resource('categories', CategoryController::class);
     Route::post('categories/update-order', [CategoryController::class, 'updateOrder'])
         ->name('categories.update-order');
