@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 class PackageController extends Controller
 {
     public function index(){
-        $packages = Package::with(['foods', 'branch', 'category'])->paginate(10);
+        $packages = Package::with(['foods', 'branch', 'category'])->paginate(2);
         return Inertia::render('Admin/Packages/Index', compact(['packages']));
     }
 

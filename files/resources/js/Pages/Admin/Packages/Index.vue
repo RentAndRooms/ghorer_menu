@@ -14,8 +14,17 @@
                     <div class="p-6">
                         <!-- Flash Messages -->
                         <FlashMessage v-if="flash.success" :message="flash.success" class="mb-4" />
+
+                        <!-- Search Bars Row -->
+                        <div class="mb-6 flex justify-between items-center">
+                            <input v-model="packageQuery" type="text" placeholder="Search by package name..."
+                                class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-72" />
+                            <input v-model="restaurantQuery" type="text" placeholder="Search by restaurant name..."
+                                class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-72" />
+                        </div>
+
                         <!-- packages Table -->
-                        <div v-if="true" class="overflow-x-auto">
+                        <div v-if="filteredPackages.length > 0" class="overflow-x-auto">
                             <table class="w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead class="bg-gray-50 dark:bg-gray-700/50">
                                     <tr>
@@ -40,7 +49,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                                    <tr v-for="pack in packages.data" :key="pack.id"
+                                    <tr v-for="pack in filteredPackages" :key="pack.id"
                                         class="group transition-colors duration-150 hover:bg-gray-50/90 dark:hover:bg-gray-700/50">
                                         <td class="px-6 py-4">
                                             <div class="text-sm font-medium text-gray-900 dark:text-white">{{
@@ -103,9 +112,9 @@
                         </div>
 
                         <!-- Pagination -->
-                        <!-- <div v-if="packages.data.length > 0" class="mt-4">
-                            <SimplePagination :links="packages.meta.links" :meta="packages.meta" />
-                        </div> -->
+                        <div v-if="packages.data.length > 0" class="mt-4">
+                            <SimplePagination :links="packages.links" :meta="packages" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -129,7 +138,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { Link, useForm } from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import SimplePagination from "@/Components/SimplePagination.vue";
@@ -175,6 +184,21 @@ const showDeleteModal = ref(false);
 const packageToDelete = ref(null);
 const processing = ref(false)
 const form = useForm({});
+
+const packageQuery = ref("");
+const restaurantQuery = ref("");
+const filteredPackages = computed(() => {
+    let packs = props.packages.data;
+    if (packageQuery.value) {
+        const query = packageQuery.value.toLowerCase();
+        packs = packs.filter(pack => (pack.name?.toLowerCase() || "").includes(query));
+    }
+    if (restaurantQuery.value) {
+        const query = restaurantQuery.value.toLowerCase();
+        packs = packs.filter(pack => (pack.branch?.name?.toLowerCase() || "").includes(query));
+    }
+    return packs;
+});
 
 const confirmDelete = (pack) => {
     packageToDelete.value = pack;

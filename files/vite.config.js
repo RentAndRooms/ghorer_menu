@@ -19,7 +19,7 @@ export default defineConfig({
     ],
     build: {
         manifest: true,
-        outDir: 'build',
+        outDir: 'public/build',
         emptyOutDir: true,
         rollupOptions: {
             input: 'resources/js/app.js',

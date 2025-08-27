@@ -14,6 +14,14 @@
           <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Users</h1>
         </div>
 
+        <!-- Search Bars Row -->
+        <div class="mb-6 flex justify-between items-center">
+          <input v-model="nameQuery" type="text" placeholder="Search by user name..."
+            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-72" />
+          <input v-model="phoneQuery" type="text" placeholder="Search by phone..."
+            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-72" />
+        </div>
+
         <!-- Users Table -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
           <div class="overflow-x-auto">
@@ -43,7 +51,7 @@
                 </tr>
               </thead>
               <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                <tr v-for="user in users" :key="user.id" class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                <tr v-for="user in filteredUsers" :key="user.id" class="hover:bg-gray-50 dark:hover:bg-gray-700">
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
                     #{{ user.id }}
                   </td>
@@ -93,6 +101,7 @@
 <script>
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { Link } from '@inertiajs/vue3'
+import { computed, ref } from 'vue'
 export default {
   components: {
     AdminLayout,
@@ -103,6 +112,23 @@ export default {
       type: Array,
       required: true
     }
+  },
+  setup(props) {
+    const nameQuery = ref('')
+    const phoneQuery = ref('')
+    const filteredUsers = computed(() => {
+      let users = props.users
+      if (nameQuery.value) {
+        const query = nameQuery.value.toLowerCase()
+        users = users.filter(user => (user.name?.toLowerCase() || '').includes(query))
+      }
+      if (phoneQuery.value) {
+        const query = phoneQuery.value.toLowerCase()
+        users = users.filter(user => (user.phone?.toLowerCase() || '').includes(query))
+      }
+      return users
+    })
+    return { nameQuery, phoneQuery, filteredUsers }
   },
   methods: {
     formatRole(role) {

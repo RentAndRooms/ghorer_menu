@@ -136,8 +136,10 @@
                   {{ formatDate(order.created_at) }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <Link :href="route('admin.orders.show', order.id)"
-                    class="text-orange-600 hover:text-orange-900 dark:hover:text-orange-400">
+                  <Link :href="route('admin.orders.show', order.id)" class="inline-flex items-center px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 active:bg-indigo-200 
+           dark:bg-indigo-900/50 dark:hover:bg-indigo-800/50 text-indigo-600 dark:text-indigo-300 
+           rounded-md transition-colors duration-200 mr-2">
+                  <i class="fa-solid fa-eye text-xs mr-1.5"></i>
                   View
                   </Link>
                 </td>
