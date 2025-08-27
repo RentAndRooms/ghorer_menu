@@ -59,16 +59,24 @@
                     </span>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <a href="#" @click.prevent="viewUser(user.id)"
-                      class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
+                    <a href="#" @click.prevent="viewUser(user.id)" class="inline-flex items-center px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 active:bg-indigo-200 
+           dark:bg-indigo-900/50 dark:hover:bg-indigo-800/50 text-indigo-600 dark:text-indigo-300 
+           rounded-md transition-colors duration-200 mr-2">
+                      <i class="fa-solid fa-eye text-xs mr-1.5"></i>
                       View
                     </a>
-                    <a href="#" @click.prevent="editUser(user.id)"
-                      class="ml-4 text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300">
+
+                    <a href="#" @click.prevent="editUser(user.id)" class="inline-flex items-center px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 active:bg-indigo-200 
+           dark:bg-indigo-900/50 dark:hover:bg-indigo-800/50 text-indigo-600 dark:text-indigo-300 
+           rounded-md transition-colors duration-200 mr-2">
+                      <i class="fas fa-edit text-xs mr-1.5"></i>
                       Edit
                     </a>
-                    <a href="#" @click.prevent="deleteUser(user.id)"
-                      class="ml-4 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
+
+                    <a href="#" @click.prevent="deleteUser(user.id)" class="inline-flex items-center px-3 py-1.5 bg-red-50 hover:bg-red-100 active:bg-red-200 
+           dark:bg-red-900/50 dark:hover:bg-red-800/50 text-red-600 dark:text-red-300 
+           rounded-md transition-colors duration-200">
+                      <i class="fas fa-trash text-xs mr-1.5"></i>
                       Delete
                     </a>
                   </td>

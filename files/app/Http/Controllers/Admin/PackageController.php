@@ -27,7 +27,7 @@ class PackageController extends Controller
     public function edit($pack){
         $packageData = Package::with('foods', 'branch', 'category')->find($pack);
         $branches = DB::table('branches')->select('id', 'name')->get();
-        $categories = DB::table('categories')->select('id', 'name')->get();
+        $categories = DB::table('categories')->select('id', 'name')->whereNull('deleted_at')->get();
         return Inertia::render('Admin/Packages/Edit', compact(['categories', 'branches', 'packageData']));
     }
 

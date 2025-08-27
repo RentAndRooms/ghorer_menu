@@ -17,11 +17,24 @@
             <!-- Flash Messages -->
             <FlashMessage v-if="flash.success" :message="flash.success" class="mb-4" />
 
-            <!-- Search Bar -->
-            <div class="mb-6 flex justify-center">
-              <input v-model="searchQuery" type="text" placeholder="Search food by name or category..."
-                class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-72" />
+            <!-- Restaurant Search Bar -->
+            <div class="flex justify-between items-center mt-8 px-8 mb-4">
+              <!-- Left: Restaurant Search -->
+              <div class="w-72">
+                <p class="mb-2 font-semibold">Enter restaurant name</p>
+                <input v-model="restaurantQuery" type="text" placeholder="Search by restaurant name"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 placeholder-gray-400" />
+              </div>
+
+              <!-- Right: Food Search -->
+              <div class="w-72">
+                <p class="mb-2 font-semibold">Enter food name</p>
+                <input v-model="searchQuery" type="text" placeholder="Search food by name"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 placeholder-gray-400" />
+              </div>
             </div>
+
+
 
             <!-- Foods Table -->
             <div v-if="filteredFoods.length > 0" class="overflow-x-auto">
@@ -264,6 +277,7 @@ const showStatusModal = ref(false)
 const selectedFood = ref(null)
 const processing = ref(false)
 const searchQuery = ref('')
+const restaurantQuery = ref('')
 
 // Image handling
 const getImageUrl = (imagePath) => {
@@ -358,16 +372,22 @@ const getFoodBadges = (food) => {
   return badges
 }
 
-// Filtered foods based on search query
 const filteredFoods = computed(() => {
-  if (!searchQuery.value) return props.foods.data
-  const query = searchQuery.value.toLowerCase()
-  return props.foods.data.filter(food => {
-    const name = food.name?.toLowerCase() || ''
-    const category = food.category?.name?.toLowerCase() || ''
-    return name.includes(query) || category.includes(query)
-  })
+  let foods = props.foods.data
+  if (restaurantQuery.value) {
+    const restQuery = restaurantQuery.value.toLowerCase()
+    foods = foods.filter(food => (food.branch?.name?.toLowerCase() || '').includes(restQuery))
+  }
+  if (searchQuery.value) {
+    const query = searchQuery.value.toLowerCase()
+    foods = foods.filter(food => {
+      const name = food.name?.toLowerCase() || ''
+      return name.includes(query)
+    })
+  }
+  return foods
 })
+
 </script>
 
 <style scoped>

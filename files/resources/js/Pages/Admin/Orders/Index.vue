@@ -11,8 +11,8 @@
         <div class="p-4 space-y-4">
           <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <!-- Search -->
-            <div class="col-span-1 md:col-span-2">
-              <input v-model="search" type="text" placeholder="Search by ID, customer or address..."
+            <div>
+              <input v-model="search" type="text" placeholder="Search by ID, customer"
                 class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500" />
             </div>
 
@@ -26,7 +26,6 @@
                 </option>
               </select>
             </div>
-
             <!-- Payment Status Filter -->
             <div>
               <select v-model="filters.payment_status"
@@ -37,7 +36,9 @@
                 </option>
               </select>
             </div>
-            <div class="col-span-1">
+
+            <!-- Order Type Filter -->
+            <div>
               <select v-model="filters.order_type"
                 class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
                 <option value="">All Orders</option>
