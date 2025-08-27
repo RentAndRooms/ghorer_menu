@@ -324,9 +324,14 @@
                 </div>
 
                 <div v-if="selectedFood.length > 0">
+                  <div v-if="selectedFood.some(item => item.orderType === 'delivery')"
+                    class="mb-2 p-3 bg-yellow-100 border border-yellow-300 rounded-2xl text-center text-yellow-800 font-semibold">
+                    Delivery charge: ৳10
+                  </div>
                   <div class="mt-4 p-4 bg-white dark:bg-gray-800 rounded-2xl shadow-md text-center">
                     <span class="text-lg font-semibold text-gray-700 dark:text-gray-300">Total:</span>
-                    <span class="text-xl font-bold text-indigo-600 dark:text-indigo-400 ml-2">৳ {{ subTotal }}</span>
+                    <span class="text-xl font-bold text-indigo-600 dark:text-indigo-400 ml-2">৳ {{subTotal +
+                      (selectedFood.some(item => item.orderType === 'delivery') ? 10 : 0) }}</span>
                   </div>
 
                   <button @click="handleCheckout" :disabled="isProcessing"

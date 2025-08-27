@@ -160,12 +160,13 @@
                   {{ subtotal }}
                 </span>
               </div>
-              <!-- Only show delivery fee for delivery orders -->
-              <div v-if="orderType === 'delivery'" class="flex justify-between text-gray-600 dark:text-gray-300">
+              <!-- Show delivery charge if any cart item has orderType 'delivery' -->
+              <div v-if="cart.some(item => item.orderType === 'delivery')"
+                class="flex justify-between text-gray-600 dark:text-gray-300">
                 <span>Delivery Fee</span>
                 <span>
                   <span style="font-size: 30px;">৳</span>
-                  {{ deliveryFee }}
+                  10
                 </span>
               </div>
               <div class="border-t border-gray-200 dark:border-gray-700 pt-3">
@@ -173,7 +174,7 @@
                   <span>Total</span>
                   <span>
                     <span style="font-size: 30px;">৳</span>
-                    {{ total }}
+                    {{subtotal + (cart.some(item => item.orderType === 'delivery') ? 10 : 0)}}
                   </span>
                 </div>
               </div>
@@ -253,13 +254,6 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { Link, router } from "@inertiajs/vue3";
-import {
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  TransitionRoot,
-} from "@headlessui/vue";
-import { CreditCardIcon, MapPinIcon } from "@heroicons/vue/24/outline";
 import CustomerLayout from "@/Layouts/CustomerLayout.vue";
 
 const props = defineProps({
@@ -360,6 +354,7 @@ const loadCart = () => {
     // }
 
     cart.value = cartData.items;
+
     console.log("Cart items loaded:", cart.value);
 
     console.log("cart itmes", cart.value);
@@ -401,7 +396,7 @@ const subtotal = computed(() => {
 });
 
 const deliveryFee = computed(() => {
-  return orderType.value === "delivery" ? 2.99 : 0;
+  return orderType.value === "delivery" ? 10 : 0;
 });
 
 const total = computed(() => {
