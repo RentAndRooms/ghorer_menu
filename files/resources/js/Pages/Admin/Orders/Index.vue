@@ -12,13 +12,13 @@
           <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <!-- Search -->
             <div>
-              <input v-model="search" type="text" placeholder="Search by ID, customer"
+              <input v-model="search" type="text" placeholder="Search by ID, customer" @input="updateFilters"
                 class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500" />
             </div>
 
             <!-- Status Filter -->
             <div>
-              <select v-model="filters.status"
+              <select v-model="filters.status" @change="updateFilters"
                 class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
                 <option value="">All Statuses</option>
                 <option v-for="status in statuses" :key="status" :value="status">
@@ -26,9 +26,10 @@
                 </option>
               </select>
             </div>
+
             <!-- Payment Status Filter -->
             <div>
-              <select v-model="filters.payment_status"
+              <select v-model="filters.payment_status" @change="updateFilters"
                 class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
                 <option value="">All Payment Statuses</option>
                 <option v-for="status in payment_statuses" :key="status" :value="status">
@@ -38,14 +39,14 @@
             </div>
 
             <!-- Order Type Filter -->
-            <div>
-              <select v-model="filters.order_type"
+            <!-- <div>
+              <select v-model="filters.order_type" @change="updateFilters"
                 class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
                 <option value="">All Orders</option>
                 <option value="delivery">Delivery</option>
                 <option value="collection">Collection</option>
               </select>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -155,7 +156,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { Link, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import Pagination from '@/Components/Pagination.vue'
@@ -169,27 +170,26 @@ const props = defineProps({
 })
 
 // Search and filters
-const search = ref(props.filters.search)
-
+const search = ref(props.filters.search || '')
 const filters = ref({
   status: props.filters.status || '',
   payment_status: props.filters.payment_status || '',
-  order_type: props.filters.order_type || '',
+  order_type: props.filters.order_type || ''
 })
 
-// Update URL with filters
-watch([search, filters], debounce(() => {
+// Debounced function to update filters
+const updateFilters = debounce(() => {
   router.get(
     route('admin.orders.index'),
     {
-      search: search.value,
-      status: filters.value.status,
-      payment_status: filters.value.payment_status,
-      order_type: filters.value.order_type
+      search: search.value || null,
+      status: filters.value.status || null,
+      payment_status: filters.value.payment_status || null,
+      order_type: filters.value.order_type || null
     },
     { preserveState: true, preserveScroll: true }
   )
-}, 300))
+}, 300)
 
 // Status management
 const updateOrderStatus = (order) => {
@@ -200,9 +200,10 @@ const updateOrderStatus = (order) => {
 
 // Utility functions
 const formatStatus = (status) => {
-  return status.split('_').map(word =>
-    word.charAt(0).toUpperCase() + word.slice(1)
-  ).join(' ')
+  return status
+    .split('_')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
 }
 
 const formatDate = (date) => {
