@@ -20,12 +20,12 @@ class FoodController extends Controller
             $foods = Food::with(['category', 'branch', 'extraOptions'])
                 ->withCount('extraOptions')
                 ->orderBy('name')
-                ->paginate(10);
+                ->paginate(1000);
         } else {
             $foods = Food::with(['category', 'branch', 'extraOptions'])->where('branch_id', auth()->user()->branch->id)
                 ->withCount('extraOptions')
                 ->orderBy('name')
-                ->paginate(10);
+                ->paginate(1000);
         }
 
         return Inertia::render('Admin/Foods/Index', [
